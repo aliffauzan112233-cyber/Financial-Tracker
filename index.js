@@ -153,7 +153,7 @@ app.get('/', (c) => {
 if (process.env.VERCEL) {
     globalThis.app = app;
 } else {
-    const port = 3000;
+    const port = 3001;
     console.log(`🚀 Server berjalan di http://localhost:${port}`);
     serve({ fetch: app.fetch, port });
 }
