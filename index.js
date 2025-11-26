@@ -14,7 +14,7 @@ const SECRET = process.env.JWT_SECRET;
 
 // ROUTE UTAMA (AGAR TIDAK 404)
 app.get('/', (c) => {
-    return c.text('🚀 Financial Tracker API berjalan!');
+    return c.text('');
 });
 
 // API REGISTRASI
@@ -65,6 +65,89 @@ app.get('/api/me', (c) => {
         return c.json({ success: false, message: 'Token tidak valid' }, 401);
     }
 });
+// index.js (Lanjutan)
+// Fungsi untuk memverifikasi JWT dan mendapatkan ID Pengguna
+const authMiddleware = async (c, next) => {
+    const token = getCookie(c, 'token');
+    if (!token) return c.json({ success: false, message: 'Unauthorized' }, 401);
+    try {
+        const user = jwt.verify(token, SECRET);
+        c.set('user', user); // Menyimpan data user di context Hono
+        await next();
+    } catch (error) {
+        return c.json({ success: false, message: 'Token tidak valid' }, 401);
+    }
+};
+ 
+// --- API TAMBAH TRANSAKSI (POST) ---
+app.post('/api/transactions', authMiddleware, async (c) => {
+    try {
+        const user = c.get('user');
+        const { nominal, transactionDate, status, description } = await c.req.json();
+        const newTransaction = await db.insert(transactions)
+            .values({
+                userId: user.id,
+                nominal: nominal.toString(), // Simpan nominal sebagai string
+                transactionDate: transactionDate,
+                status: status,
+                description: description
+            })
+            .returning();
+        return c.json({ success: true, data: newTransaction[0] }, 201);
+    } catch (error) {
+        console.error("error", error);
+        return c.json({ success: false, message: 'Gagal menambah transaksi' }, 400);
+    }
+});
+
+// --- API LIHAT TRANSAKSI PER BULAN (GET) ---
+app.get('/api/transactions', authMiddleware, async (c) => {
+    try {
+        const user = c.get('user');
+        const { year, month } = c.req.query(); // Ambil tahun dan bulan dari query string
+        
+        if (!year || !month) return c.json({ success: false, message: 'Tahun dan bulan wajib diisi' }, 400);
+
+        // Filter berdasarkan user_id DAN rentang bulan
+        const startOfMonth = `${year}-${month.padStart(2, '0')}-01 00:00:00`;
+        const endOfMonth = sql`${startOfMonth} + interval '1 month'`;
+
+        const userTransactions = await db.query.transactions.findMany({
+            where: (t, { eq, and, gte, lt }) => and(
+                eq(t.userId, user.id),
+                gte(t.transactionDate, startOfMonth),
+                lt(t.transactionDate, endOfMonth)
+            ),
+            orderBy: desc(transactions.transactionDate),
+        });
+
+        // Hitung Total Laporan Keuangan
+        const totalIncome = userTransactions
+            .filter(t => t.status === 'income')
+            .reduce((sum, t) => sum + parseFloat(t.nominal), 0);
+        
+        const totalOutcome = userTransactions
+            .filter(t => t.status === 'outcome')
+            .reduce((sum, t) => sum + parseFloat(t.nominal), 0);
+        
+        const balance = totalIncome - totalOutcome;
+
+        return c.json({ 
+            success: true, 
+            data: userTransactions, 
+            summary: { totalIncome, totalOutcome, balance } 
+        });
+    } catch (error) {
+        console.error("error", error);
+        return c.json({ success: false, message: 'Gagal mengambil transaksi' }, 500);
+    }
+});
+
+// --- ROOT URL dan SERVE STATIC FILES (untuk UI) ---
+app.get('/', (c) => {
+    return c.html('<h1>Financial Tracker API is Running!</h1>');
+});
+
 
 // SERVER START
 if (process.env.VERCEL) {
