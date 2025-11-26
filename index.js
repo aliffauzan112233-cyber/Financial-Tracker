@@ -7,7 +7,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { db } from './db/index.js';
 import { users, transactions } from './db/schema.js';
-import { eq } from 'drizzle-orm';
+import { eq, sql, desc } from 'drizzle-orm';
 
 const app = new Hono();
 const SECRET = process.env.JWT_SECRET;
@@ -34,18 +34,22 @@ app.post('/api/register', async (c) => {
 
 // API LOGIN
 app.post('/api/login', async (c) => {
-    const { username, password } = await c.req.json();
-    const user = await db.query.users.findFirst({ where: eq(users.username, username) });
+    try {
+        const { username, password } = await c.req.json();
+        const user = await db.query.users.findFirst({ where: eq(users.username, username) });
 
-    if (!user) return c.json({ success: false, message: 'Username atau password salah' }, 401);
-    
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) return c.json({ success: false, message: 'Username atau password salah' }, 401);
+        if (!user) return c.json({ success: false, message: 'Username atau password salah' }, 401);
 
-    const token = jwt.sign({ id: user.id, username: user.username }, SECRET, { expiresIn: '1d' });
-    setCookie(c, 'token', token, { httpOnly: true, sameSite: 'Lax', maxAge: 86400 });
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) return c.json({ success: false, message: 'Username atau password salah' }, 401);
 
-    return c.json({ success: true, message: 'Login berhasil' });
+        const token = jwt.sign({ id: user.id, username: user.username }, SECRET, { expiresIn: '1d' });
+        setCookie(c, 'token', token, { httpOnly: true, sameSite: 'Lax', maxAge: 86400 });
+
+        return c.json({ success: true, message: 'Login berhasil' });
+    } catch (error) {
+        return c.json({ success: false, message: 'Invalid JSON' }, 400);
+    }
 });
 
 // API LOGOUT
@@ -71,7 +75,7 @@ const authMiddleware = async (c, next) => {
     const token = getCookie(c, 'token');
     if (!token) return c.json({ success: false, message: 'Unauthorized' }, 401);
     try {
-        const user = jwt.verify(token, SECRET);
+        const user = jwt.verifyTAMBAH TRANSAKSI(token, SECRET);
         c.set('user', user); // Menyimpan data user di context Hono
         await next();
     } catch (error) {
@@ -79,11 +83,17 @@ const authMiddleware = async (c, next) => {
     }
 };
  
-// --- API TAMBAH TRANSAKSI (POST) ---
+// --- API  (POST) ---
 app.post('/api/transactions', authMiddleware, async (c) => {
+    let body;
+    try {
+        body = await c.req.json();
+    } catch (error) {
+        return c.json({ success: false, message: 'Invalid JSON' }, 400);
+    }
     try {
         const user = c.get('user');
-        const { nominal, transactionDate, status, description } = await c.req.json();
+        const { nominal, transactionDate, status, description } = body;
         const newTransaction = await db.insert(transactions)
             .values({
                 userId: user.id,
