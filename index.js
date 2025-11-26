@@ -7,13 +7,17 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { db } from './db/index.js';
 import { users, transactions } from './db/schema.js';
-import { eq, desc, sql } from 'drizzle-orm';
-import { serveStatic } from '@hono/node-server/serve-static';
- 
+import { eq } from 'drizzle-orm';
+
 const app = new Hono();
 const SECRET = process.env.JWT_SECRET;
- 
-// --- API REGISTRASI ---
+
+// ROUTE UTAMA (AGAR TIDAK 404)
+app.get('/', (c) => {
+    return c.text('🚀 Financial Tracker API berjalan!');
+});
+
+// API REGISTRASI
 app.post('/api/register', async (c) => {
     try {
         const { username, password } = await c.req.json();
@@ -21,35 +25,36 @@ app.post('/api/register', async (c) => {
         const newUser = await db.insert(users)
             .values({ username, password: hashedPassword })
             .returning({ id: users.id, username: users.username });
+
         return c.json({ success: true, data: newUser[0] }, 201);
     } catch (error) {
         return c.json({ success: false, message: 'Registrasi gagal' }, 400);
     }
 });
- 
-// --- API LOGIN ---
+
+// API LOGIN
 app.post('/api/login', async (c) => {
     const { username, password } = await c.req.json();
     const user = await db.query.users.findFirst({ where: eq(users.username, username) });
- 
+
     if (!user) return c.json({ success: false, message: 'Username atau password salah' }, 401);
     
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) return c.json({ success: false, message: 'Username atau password salah' }, 401);
- 
+
     const token = jwt.sign({ id: user.id, username: user.username }, SECRET, { expiresIn: '1d' });
     setCookie(c, 'token', token, { httpOnly: true, sameSite: 'Lax', maxAge: 86400 });
-    
+
     return c.json({ success: true, message: 'Login berhasil' });
 });
- 
-// --- API LOGOUT ---
+
+// API LOGOUT
 app.post('/api/logout', (c) => {
     setCookie(c, 'token', '', { maxAge: -1 });
     return c.json({ success: true, message: 'Logout berhasil' });
 });
- 
-// --- MIDDLEWARE & API ME ---
+
+// API ME
 app.get('/api/me', (c) => {
     const token = getCookie(c, 'token');
     if (!token) return c.json({ success: false, message: 'Unauthorized' }, 401);
@@ -61,12 +66,11 @@ app.get('/api/me', (c) => {
     }
 });
 
-// --- SERVER START ---
-// Logika Vercel (akan ditambahkan nanti)
+// SERVER START
 if (process.env.VERCEL) {
     globalThis.app = app;
 } else {
     const port = 3000;
-    console.log(`🚀 Server is running on http://localhost:${port}`);
+    console.log(`🚀 Server berjalan di http://localhost:${port}`);
     serve({ fetch: app.fetch, port });
 }
