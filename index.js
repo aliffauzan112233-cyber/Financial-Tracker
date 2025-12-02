@@ -67,7 +67,7 @@ app.use('/*', serveStatic({ root: './public' }));
 if (process.env.VERCEL) {
     globalThis.app = app;
 } else {
-    const port = 3000;
+    const port = 3001;
     console.log(`🚀 Server is running on http://localhost:${port}`);
     serve({ fetch: app.fetch, port });
 }
