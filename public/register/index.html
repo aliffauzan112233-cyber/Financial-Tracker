@@ -86,7 +86,22 @@
   }
 </style>
 </head>
-
+<!-- Notifikasi -->
+<div id="notif" style="
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background:#0067e0;
+  color: white;
+  padding: 14px 22px;
+  border-radius: 8px;
+  font-size: 16px;
+  display: none;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  z-index: 999;
+">
+</div>
 <body>
 
 <div class="register-box">
@@ -108,8 +123,18 @@
   <p>Sudah punya akun? <a href="/login">Login</a></p>
 
 </div>
-
 <script>
+function showNotif(text, success = true) {
+  const box = document.getElementById("notif");
+  box.innerText = text;
+  box.style.background = success ? "#0067e0" : "#e74c3c";
+  box.style.display = "block";
+
+  setTimeout(() => {
+    box.style.display = "none";
+  }, 2000);
+}
+
 async function registerUser() {
   const res = await fetch("/api/register", {
     method: "POST",
@@ -121,8 +146,15 @@ async function registerUser() {
   })
 
   const data = await res.json()
-  alert(data.message)
-  if (data.success) location.href = "/login"
+
+  // tampilkan notifikasi
+  showNotif(data.message, data.success)
+
+  if (data.success) {
+    setTimeout(() => {
+      location.href = "/login"
+    }, 1200)
+  }
 }
 </script>
 
