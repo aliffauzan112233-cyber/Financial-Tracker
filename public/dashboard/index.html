@@ -4,131 +4,17 @@
 <meta charset="UTF-8">
 <title>Dashboard</title>
 
-<style>
-    body {
-        font-family: 'Segoe UI', Arial, sans-serif;
-        background: #f5f7fb;
-        padding: 20px;
-        max-width: 900px;
-        margin: auto;
-        color: #333;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-    }
-
-    .logout-btn {
-        background:#2d89ff;
-        padding: 8px 14px;
-        border: none;
-        color: white;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    .logout-btn:hover {
-        background: #0067e0;
-    }
-
-    h1 {
-        margin: 0;
-    }
-
-    .card {
-        background: white;
-        padding: 18px;
-        border-radius: 10px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.08);
-        margin-bottom: 25px;
-    }
-
-    .section-title {
-        font-size: 20px;
-        font-weight: bold;
-        margin-bottom: 12px;
-    }
-
-    p {
-        margin: 6px 0;
-    }
-
-    input, select {
-        padding: 10px;
-        margin: 6px 0 14px 0;
-        width: 100%;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-    }
-
-    button {
-        padding: 10px 18px;
-        background: #2d89ff;
-        border: none;
-        color: white;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    button:hover {
-        background: #0067e0;
-    }
-
-    ul {
-        padding-left: 20px;
-    }
-
-    li {
-        margin-bottom: 8px;
-        background: white;
-        padding: 10px;
-        border-radius: 6px;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    #notifBox {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 9999;
-    width: 100%;
-    max-width: 300px;
-    text-align: center;
-}
-.notif {
-    padding: 12px 18px;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    color: white;
-    font-size: 14px;
-    animation: fadeIn 0.4s ease;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-}
-.success { background: #2d89ff; }
-.error { background: #ff4d4d; }
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-</style>
 </head>
-<!-- notifikasi -->
-<div id="notifBox"></div>
+
 <body>
-<body>
-<!-- notifikasi -->
+
+<!-- NOTIFIKASI -->
 <div id="notifBox"></div>
+
+<!-- HEADER -->
 <div class="header">
     <h1 id="username">Halo, ...</h1>
-    <button class="logout-btn" onclick="logout()">Logout</button>
+    <button onclick="logout()">Logout</button>
 </div>
 
 <!-- RINGKASAN -->
@@ -144,20 +30,28 @@
 <div class="card">
     <div class="section-title">Input Transaksi Baru</div>
 
-    <label>Nominal:</label>
-    <input type="number" id="amount" placeholder="Contoh: 500000">
+    <div>
+        <label>Nominal:</label><br>
+        <input type="number" id="amount" placeholder="Contoh: 500000">
+    </div>
 
-    <label>Tanggal:</label>
-    <input type="date" id="date">
+    <div>
+        <label>Tanggal:</label><br>
+        <input type="date" id="date">
+    </div>
 
-    <label>Status:</label>
-    <select id="status">
-        <option value="INCOME">Pemasukan</option>
-        <option value="OUTCOME">Pengeluaran</option>
-    </select>
+    <div>
+        <label>Status:</label><br>
+        <select id="status">
+            <option value="INCOME">Pemasukan</option>
+            <option value="OUTCOME">Pengeluaran</option>
+        </select>
+    </div>
 
-    <label>Keterangan (Opsional):</label>
-    <input type="text" id="description" placeholder="Contoh: Gaji bulan lalu">
+    <div>
+        <label>Keterangan (Opsional):</label><br>
+        <input type="text" id="description" placeholder="Contoh: Gaji bulan lalu">
+    </div>
 
     <button onclick="tambahTransaksi()">Tambah Transaksi</button>
 </div>
@@ -169,7 +63,7 @@
 </div>
 
 
-<!-- ================= SCRIPT ================= -->
+<!-- SCRIPT -->
 <script>
 async function logout() {
     await fetch("/api/logout", { method: "POST" });
@@ -182,8 +76,7 @@ async function loadUser() {
 
     if (!data.success) return (location.href = "/login");
 
-    document.getElementById("username").innerText =
-        "Halo, " + data.user.username;
+    document.getElementById("username").innerText = "Halo, " + data.user.username;
 }
 loadUser();
 
@@ -216,12 +109,9 @@ async function loadDashboard() {
         riw.appendChild(li);
     });
 
-    document.getElementById("income").innerText =
-        "Rp " + income.toLocaleString();
-    document.getElementById("outcome").innerText =
-        "Rp " + outcome.toLocaleString();
-    document.getElementById("balance").innerText =
-        "Rp " + (income - outcome).toLocaleString();
+    document.getElementById("income").innerText = "Rp " + income.toLocaleString();
+    document.getElementById("outcome").innerText = "Rp " + outcome.toLocaleString();
+    document.getElementById("balance").innerText = "Rp " + (income - outcome).toLocaleString();
 }
 loadDashboard();
 
@@ -231,10 +121,22 @@ async function tambahTransaksi() {
   const statusInput = document.getElementById("status");
   const descInput = document.getElementById("description");
 
-  if (!amountInput.value || !dateInput.value) {
-showNotif("Nominal dan tanggal wajib diisi!", "error");
-    return;
+  // ===== VALIDASI BARU SESUAI INPUT YANG KOSONG =====
+  if (!amountInput.value && !dateInput.value) {
+      showNotif("Nominal dan tanggal wajib diisi!", "error");
+      return;
   }
+
+  if (!amountInput.value) {
+      showNotif("Nominal belum diisi!", "error");
+      return;
+  }
+
+  if (!dateInput.value) {
+      showNotif("Tanggal belum diisi!", "error");
+      return;
+  }
+  // ==================================================
 
   const cleanAmount = amountInput.value.replace(/\./g, "");
 
@@ -250,28 +152,35 @@ showNotif("Nominal dan tanggal wajib diisi!", "error");
   });
 
   const data = await res.json();
-showNotif(data.message, data.success ? "success" : "error");
+  showNotif(data.message, data.success ? "success" : "error");
 
   loadDashboard();
 }
+
 function showNotif(message, type = "success") {
     const box = document.getElementById("notifBox");
 
     const div = document.createElement("div");
-    div.className = "notif " + type;
+    
     div.innerText = message;
+    box.style.position = "fixed";
+    div.style.padding = "10px";
+    div.style.margin = "5px 0";
+    div.style.borderRadius = "5px";
+    div.style.color = "white";
+    div.style.background = type === "success" ? "#2ecc71" : "#e74c3c";
+    div.style.minWidth = "200px";     // ➜ biar kotak kelihatan rapi
 
     box.appendChild(div);
 
     setTimeout(() => {
-        div.style.transition = "0.5s";
+
         div.style.opacity = "0";
-        div.style.transform = "translateY(-10px)";
-    }, 2500);
+    }, 2000);
 
     setTimeout(() => {
         box.removeChild(div);
-    }, 3000);
+    }, 2600);
 }
 
 </script>

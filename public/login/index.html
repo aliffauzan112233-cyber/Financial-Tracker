@@ -4,102 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login</title>
-
-<style>
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .login-box {
-    width: 320px;
-    background: #fff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    text-align: center;
-  }
-
-  h1 {
-    margin: 0 0 25px 0;
-    color: #333;
-    font-size: 26px;
-  }
-
-  .input-group {
-    text-align: left;
-    margin-bottom: 15px;
-  }
-
-  .input-group label {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    display: block;
-    color: #444;
-  }
-
-  input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 15px;
-    box-sizing: border-box;
-  }
-
-  button {
-    margin-top: 10px;
-    width: 100%;
-    padding: 12px;
-    font-size: 16px;
-    border: none;
-    background: #2d89ff;
-    color: white;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-
-  button:hover {
-    background: #0067e0;
-  }
-
-  a {
-    color: #2d89ff;
-    text-decoration: none;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-
-  /* Notifikasi */
-  #notif {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background:#0067e0;
-    color: white;
-    padding: 14px 22px;
-    border-radius: 8px;
-    font-size: 16px;
-    display: none;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    z-index: 999;
-  }
-</style>
 </head>
 
 <body>
 
-<!-- NOTIFIKASI -->
+<!-- NOTIFIKASI (dirapihkan posisinya saja) -->
 <div id="notif">Notifikasi</div>
 
 <div class="login-box">
@@ -129,10 +38,22 @@ window.onload = () => {
   password.value = "";
 };
 
+// Notifikasi dirapikan → hanya perbaikan JS (TANPA CSS)
 function showNotif(text, success = true) {
   const box = document.getElementById("notif");
   box.innerText = text;
-  box.style.background = success ? "#0067e0" : "#e74c3c";
+
+  // Warna tetap sama seperti bawaan kamu
+  box.style.background = success ? "#2ecc71" : "#e74c3c";
+
+  // Dirapikan supaya muncul di atas tengah (tanpa CSS file)
+  box.style.position = "fixed";
+  box.style.top = "15px";
+  box.style.left = "50%";
+  box.style.transform = "translateX(-50%)";
+  box.style.padding = "10px 20px";
+  box.style.color = "white";
+  box.style.borderRadius = "5px";
   box.style.display = "block";
 
   setTimeout(() => box.style.display = "none", 2000);
@@ -142,7 +63,6 @@ async function login() {
   const user = username.value.trim();
   const pass = password.value.trim();
 
-  // VALIDASI LENGKAP
   if (!user && !pass) {
     showNotif("Isi username & password terlebih dahulu!", false);
     return;
@@ -158,7 +78,6 @@ async function login() {
     return;
   }
 
-  // Jika valid → kirim ke server
   const res = await fetch("/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
