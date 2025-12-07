@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Logging Out...</title>
+  <title>Logging Out</title>
 </head>
- 
+
 <body>
   <h1>Anda sedang keluar...</h1>
   <script>
+    //Fungsi async ini langsung dijalankan begitu halaman dibuka
     (async () => {
       try {
-        // Panggil API logout untuk menghapus cookie
+        // try = mencoba mengambil Api Logout 
         await fetch('/api/logout', { method: 'POST' });
       } catch (error) {
         console.error('Logout failed:', error);
       } finally {
-        // Selalu alihkan ke halaman login setelah mencoba logout
+        // Selalu ke halaman login setelah mencoba logout
         window.location.href = '/login/';
       }
     })();
   </script>
 </body>
- 
+
 </html>

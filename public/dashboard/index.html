@@ -56,20 +56,21 @@
     <button onclick="tambahTransaksi()">Tambah Transaksi</button>
 </div>
 
-<!-- RIWAYAT -->
+<!-- Riwayat Transaksi -->
 <div class="card">
     <div class="section-title">Riwayat Transaksi</div>
     <ul id="riwayat"></ul>
 </div>
 
 
-<!-- SCRIPT -->
+<!-- Fungsing untuk Logout -->
 <script>
 async function logout() {
     await fetch("/api/logout", { method: "POST" });
     location.href = "/login";
 }
 
+// Fungsi Load User (mengecek apakah sudah login atau belum)
 async function loadUser() {
     const res = await fetch("/api/me");
     const data = await res.json();
@@ -80,12 +81,14 @@ async function loadUser() {
 }
 loadUser();
 
+// Fungsi Load Dashboard(mengambil semua transaksi user dari server )
 async function loadDashboard() {
     const res = await fetch("/api/transactions");
     const data = await res.json();
 
     if (!data.success) return;
 
+    // menentukan bulan sekarang 
     const monthString = new Date().toLocaleString("id-ID", {
         month: "long",
         year: "numeric"
@@ -103,6 +106,7 @@ async function loadDashboard() {
         if (t.status === "INCOME") income += nominal;
         else outcome += nominal;
 
+        // menampilkan riwayat transaksi
         const li = document.createElement("li");
         li.innerHTML =
             `<b>[${t.status}]</b> ${tanggal} : Rp ${nominal.toLocaleString()} <br> ${t.description}`;
@@ -115,48 +119,52 @@ async function loadDashboard() {
 }
 loadDashboard();
 
+// Fungsi tambah Transaksi
+// mengambil semua input dari form 
 async function tambahTransaksi() {
-  const amountInput = document.getElementById("amount");
-  const dateInput = document.getElementById("date");
-  const statusInput = document.getElementById("status");
-  const descInput = document.getElementById("description");
+const amountInput = document.getElementById("amount");
+const dateInput = document.getElementById("date");
+const statusInput = document.getElementById("status");
+const descInput = document.getElementById("description");
 
-  // ===== VALIDASI BARU SESUAI INPUT YANG KOSONG =====
-  if (!amountInput.value && !dateInput.value) {
-      showNotif("Nominal dan tanggal wajib diisi!", "error");
-      return;
-  }
+  //VALIDASI BARU SESUAI INPUT YANG KOSONG
+if (!amountInput.value && !dateInput.value) {
+    showNotif("Nominal dan tanggal wajib diisi!", "error");
+    return;
+}
 
-  if (!amountInput.value) {
-      showNotif("Nominal belum diisi!", "error");
-      return;
-  }
+if (!amountInput.value) {
+    showNotif("Nominal belum diisi!", "error");
+    return;
+}
 
-  if (!dateInput.value) {
-      showNotif("Tanggal belum diisi!", "error");
-      return;
-  }
-  // ==================================================
+if (!dateInput.value) {
+    showNotif("Tanggal belum diisi!", "error");
+    return;
+}
 
-  const cleanAmount = amountInput.value.replace(/\./g, "");
 
-  const res = await fetch("/api/transaction/add", {
+const cleanAmount = amountInput.value.replace(/\./g, "");
+
+//mengirim data ke server
+const res = await fetch("/api/transaction/add", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      amount: cleanAmount,
-      date: dateInput.value,
-      status: statusInput.value,
-      description: descInput.value
+    amount: cleanAmount,
+    date: dateInput.value,
+    status: statusInput.value,
+    description: descInput.value
     })
-  });
+});
 
-  const data = await res.json();
-  showNotif(data.message, data.success ? "success" : "error");
+const data = await res.json();
+showNotif(data.message, data.success ? "success" : "error");
 
-  loadDashboard();
+loadDashboard();
 }
 
+// Fungsi menmpilkan Notifikasi
 function showNotif(message, type = "success") {
     const box = document.getElementById("notifBox");
 
@@ -167,9 +175,9 @@ function showNotif(message, type = "success") {
     div.style.padding = "10px";
     div.style.margin = "5px 0";
     div.style.borderRadius = "5px";
-    div.style.color = "white";
-    div.style.background = type === "success" ? "#2ecc71" : "#e74c3c";
-    div.style.minWidth = "200px";     // ➜ biar kotak kelihatan rapi
+    div.style.color = "white"; //warna tulisan
+    div.style.background = type === "success" ? "#2ecc71" : "#e74c3c"; // warna backround
+    div.style.minWidth = "200px";     //biar kotak kelihatan rapi
 
     box.appendChild(div);
 

@@ -9,15 +9,18 @@
 </div>
 <body>
 
+<!-- tampilkan Register -->
 <div class="register-box">
 
   <h1>Register</h1>
 
+  <!-- Input UserName -->
   <div class="input-group">
     <label for="username">Username</label>
     <input id="username" placeholder="Masukkan username...">
   </div>
 
+  <!-- Input Password -->
   <div class="input-group">
     <label for="password">Password</label>
     <input id="password" type="password" placeholder="Masukkan password...">
@@ -40,6 +43,7 @@ function showNotif(text, success = true) {
   }, 2000);
 }
 
+// Fungsi utama Register
 async function registerUser() {
   const res = await fetch("/api/register", {
     method: "POST",
@@ -52,7 +56,7 @@ async function registerUser() {
 
   const data = await res.json()
 
-  // tampilkan notifikasi
+  // tampilkan Notifikasi
   showNotif(data.message, data.success)
 
   if (data.success) {

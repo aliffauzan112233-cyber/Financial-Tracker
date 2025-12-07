@@ -12,27 +12,29 @@ import { db } from './db/index.js'
 import { users, transactions } from './db/schema.js'
 import { eq } from 'drizzle-orm'
 
+// setup folder dan server
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 const app = new Hono()
 const SECRET = process.env.JWT_SECRET || 'rahasia'
 
-// ======================================================
-// LOAD HTML
-// ======================================================
+
+// Fungsi untuk memuat HTML  
+
 const loadHTML = async (folder, file) => {
   const filePath = path.join(__dirname, 'public', folder, file)
   return await fs.promises.readFile(filePath, 'utf-8')
 }
 
+// Routing halaman HTML 
 app.get('/', (c) => c.redirect('/login'))
 app.get('/login', async (c) => c.html(await loadHTML('login', 'index.html')))
 app.get('/register', async (c) => c.html(await loadHTML('register', 'index.html')))
 app.get('/dashboard', async (c) => c.html(await loadHTML('dashboard', 'index.html')))
 
 
-// AUTH HELPERS
+// AUTH HELPERS (untuk mengecek apakah server sudah login dan mengambil token cokie dari browser)
 
 function auth(c) {
   const token = getCookie(c, 'token')
@@ -63,6 +65,7 @@ app.post('/api/register', async (c) => {
     password: hashed
   })
 
+  // Retruns
   return c.json({ success: true, message: 'Registrasi berhasil' })
 })
 
@@ -78,15 +81,17 @@ app.post('/api/login', async (c) => {
 
   const user = found[0]
 
+  // jika tidak ada maka akann gagal 
   const valid = await bcrypt.compare(password, user.password)
   if (!valid) return c.json({ success: false, message: 'Username atau password salah' })
 
+    // jika password cocok maka akan di buatkan token 
   const token = jwt.sign(
     { id: user.id, username: user.username },
     SECRET,
     { expiresIn: '1d' }
   )
-
+  // simpan token ke cokie (bukti bahwa user sudah login )
   setCookie(c, 'token', token, { httpOnly: true, path: '/' })
 
   return c.json({ success: true, message: 'Login berhasil' })
@@ -119,7 +124,7 @@ app.use("*", async (c, next) => {
 })
 
 
-// GET Api TRANSACTIONS
+// GET Api TRANSACTIONS (Mengambil semua transaksi dari user yang sedang login.)
 
 app.get("/api/transactions", async (c) => {
   const user = c.get("user")
@@ -132,16 +137,16 @@ app.get("/api/transactions", async (c) => {
 })
 
 
-// ADD TRANSACTION 
+// Add/Tambah TRANSACTION 
 
 app.post("/api/transaction/add", async (c) => {
   try {
-    const user = c.get("user")
+    const user = c.get("user")//mengecek login 
     if (!user) return c.json({ success: false, message: "Belum login" })
 
-    const body = await c.req.json()
+    const body = await c.req.json()//ambil data dari frontend
 
-    
+    //validasi nominal 
     let nominal = body.amount
     if (!nominal) {
       return c.json({ success: false, message: "Nominal wajib diisi" })
@@ -153,7 +158,7 @@ app.post("/api/transaction/add", async (c) => {
     
     let tanggal = body.date
     if (!tanggal) tanggal = new Date().toISOString()  // default hari ini
-    //insert
+    //simpan ke database
     await db.insert(transactions).values({
       userId: user.id,
       nominal: nominal,
@@ -172,8 +177,9 @@ app.post("/api/transaction/add", async (c) => {
 
 
 
-app.notFound((c) => c.text('404 Not Found'))
+app.notFound((c) => c.text('404 Not Found'))// users mengakses halaman yang tidak ada 
 
+// jalankan server
 serve({ fetch: app.fetch, port: 3001 }, () => {
   console.log('🚀 Server jalan di http://localhost:3001')
 })

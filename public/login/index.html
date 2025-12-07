@@ -32,21 +32,21 @@
 </div>
 
 <script>
-// Kosongkan input saat halaman dibuka
+//Script untuk mengosongkan input saat halaman dibuka
 window.onload = () => {
   username.value = "";
   password.value = "";
 };
 
-// Notifikasi dirapikan → hanya perbaikan JS (TANPA CSS)
+// Fungsi showNotif() untuk menampilkan Notifikasi
 function showNotif(text, success = true) {
   const box = document.getElementById("notif");
   box.innerText = text;
 
-  // Warna tetap sama seperti bawaan kamu
+
   box.style.background = success ? "#2ecc71" : "#e74c3c";
 
-  // Dirapikan supaya muncul di atas tengah (tanpa CSS file)
+  // css untuk Notifikasi
   box.style.position = "fixed";
   box.style.top = "15px";
   box.style.left = "50%";
@@ -56,13 +56,16 @@ function showNotif(text, success = true) {
   box.style.borderRadius = "5px";
   box.style.display = "block";
 
-  setTimeout(() => box.style.display = "none", 2000);
+  setTimeout(() => box.style.display = "none", 2000);// Auto hilang 2 detik
 }
 
+// Ambil value input 
+// fungsi trim() menghapus spasi di depan/belakang.
 async function login() {
   const user = username.value.trim();
   const pass = password.value.trim();
 
+  // validasi input kosong 
   if (!user && !pass) {
     showNotif("Isi username & password terlebih dahulu!", false);
     return;
@@ -78,12 +81,14 @@ async function login() {
     return;
   }
 
+  // kirim ke server untuk login 
   const res = await fetch("/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ username: user, password: pass })
   });
 
+  // ambil Respawn dari server
   const data = await res.json();
 
   showNotif(data.message, data.success);
