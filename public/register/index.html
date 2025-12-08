@@ -4,47 +4,54 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Register</title>
-
-
-</div>
+</head>
 <body>
 
-<!-- tampilkan Register -->
-<div class="register-box">
+<!-- Kotak Notifikasi -->
+<div id="notif" style="display:none; padding:10px; margin-bottom:10px; color:white;"></div>
 
+<!-- Form Register -->
+<div>
   <h1>Register</h1>
 
-  <!-- Input UserName -->
-  <div class="input-group">
-    <label for="username">Username</label>
+  <div>
+    <label>Username</label><br>
     <input id="username" placeholder="Masukkan username...">
   </div>
+  <br>
 
-  <!-- Input Password -->
-  <div class="input-group">
-    <label for="password">Password</label>
+  <div>
+    <label>Password</label><br>
     <input id="password" type="password" placeholder="Masukkan password...">
   </div>
+  <br>
 
   <button onclick="registerUser()">Register</button>
 
   <p>Sudah punya akun? <a href="/login">Login</a></p>
 
 </div>
+
 <script>
 function showNotif(text, success = true) {
   const box = document.getElementById("notif");
   box.innerText = text;
-  box.style.background = success ? "#0067e0" : "#e74c3c";
-  box.style.display = "block";
+  box.style.background = success ? "green" : "red";
+  // box.style.display = "block";
 
   setTimeout(() => {
     box.style.display = "none";
   }, 2000);
 }
 
-// Fungsi utama Register
+// Fungsi Register
 async function registerUser() {
+  // Validasi jika kosong
+  if (!username.value || !password.value) {
+    showNotif("Isi username & password dulu!", false);
+    return;
+  }
+
   const res = await fetch("/api/register", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -52,17 +59,17 @@ async function registerUser() {
       username: username.value,
       password: password.value
     })
-  })
+  });
 
-  const data = await res.json()
+  const data = await res.json();
 
-  // tampilkan Notifikasi
-  showNotif(data.message, data.success)
+  // Tampilkan notifikasi
+  showNotif(data.message, data.success);
 
   if (data.success) {
     setTimeout(() => {
-      location.href = "/login"
-    }, 1200)
+      location.href = "/login";
+    }, 1200);
   }
 }
 </script>
