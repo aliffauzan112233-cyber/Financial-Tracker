@@ -1,197 +1,206 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-<meta charset="UTF-8">
-<title>Dashboard</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard</title>
+  </head>
 
-</head>
+  <body>
+    <!-- NOTIFIKASI -->
+    <div id="notifBox"></div>
 
-<body>
-
-<!-- NOTIFIKASI -->
-<div id="notifBox"></div>
-
-<!-- HEADER -->
-<div class="header">
-    <h1 id="username">Halo, ...</h1>
-    <button onclick="logout()">Logout</button>
-</div>
-
-<!-- RINGKASAN -->
-<div class="card">
-    <div class="section-title">Ringkasan Bulan Ini (<span id="month"></span>)</div>
-
-    <p>Pemasukan: <b id="income">Rp 0</b></p>
-    <p>Pengeluaran: <b id="outcome">Rp 0</b></p>
-    <p>Sisa Saldo: <b id="balance">Rp 0</b></p>
-</div>
-
-<!-- INPUT TRANSAKSI -->
-<div class="card">
-    <div class="section-title">Input Transaksi Baru</div>
-
-    <div>
-        <label>Nominal:</label><br>
-        <input type="number" id="amount" placeholder="Contoh: 500000">
+    <!-- HEADER -->
+    <div class="header">
+      <h1 id="username">Halo, ...</h1>
+      <button onclick="logout()">Logout</button>
     </div>
 
-    <div>
-        <label>Tanggal:</label><br>
-        <input type="date" id="date">
+    <!-- RINGKASAN -->
+    <div class="card">
+      <div class="section-title">
+        Ringkasan Bulan Ini (<span id="month"></span>)
+      </div>
+
+      <p>Pemasukan: <b id="income">Rp 0</b></p>
+      <p>Pengeluaran: <b id="outcome">Rp 0</b></p>
+      <p>Sisa Saldo: <b id="balance">Rp 0</b></p>
     </div>
 
-    <div>
-        <label>Status:</label><br>
+    <!-- INPUT TRANSAKSI -->
+    <div class="card">
+      <div class="section-title">Input Transaksi Baru</div>
+
+      <div>
+        <label>Nominal:</label><br />
+        <input type="number" id="amount" placeholder="Contoh: 500000" />
+      </div>
+
+      <div>
+        <label>Tanggal:</label><br />
+        <input type="date" id="date" />
+      </div>
+
+      <div>
+        <label>Status:</label><br />
         <select id="status">
-            <option value="INCOME">Pemasukan</option>
-            <option value="OUTCOME">Pengeluaran</option>
+          <option value="INCOME">Pemasukan</option>
+          <option value="OUTCOME">Pengeluaran</option>
         </select>
+      </div>
+
+      <div>
+        <label>Keterangan (Opsional):</label><br />
+        <input
+          type="text"
+          id="description"
+          placeholder="Contoh: Gaji bulan lalu"
+        />
+      </div>
+
+      <button onclick="tambahTransaksi()">Tambah Transaksi</button>
     </div>
 
-    <div>
-        <label>Keterangan (Opsional):</label><br>
-        <input type="text" id="description" placeholder="Contoh: Gaji bulan lalu">
+    <!-- Riwayat Transaksi -->
+    <div class="card">
+      <div class="section-title">Riwayat Transaksi</div>
+      <ul id="riwayat"></ul>
     </div>
 
-    <button onclick="tambahTransaksi()">Tambah Transaksi</button>
-</div>
+    <!-- Fungsing untuk Logout -->
+    <script>
+      async function logout() {
+        await fetch("/api/logout", { method: "POST" });
+        location.href = "/login";
+      }
 
-<!-- Riwayat Transaksi -->
-<div class="card">
-    <div class="section-title">Riwayat Transaksi</div>
-    <ul id="riwayat"></ul>
-</div>
+      // Fungsi Load User (mengecek apakah sudah login atau belum)
+      async function loadUser() {
+        const res = await fetch("/api/me");
+        const data = await res.json();
 
+        if (!data.success) return (location.href = "/login");
 
-<!-- Fungsing untuk Logout -->
-<script>
-async function logout() {
-    await fetch("/api/logout", { method: "POST" });
-    location.href = "/login";
-}
+        document.getElementById("username").innerText =
+          "Halo, " + data.user.username;
+      }
+      loadUser();
 
-// Fungsi Load User (mengecek apakah sudah login atau belum)
-async function loadUser() {
-    const res = await fetch("/api/me");
-    const data = await res.json();
+      // Fungsi Load Dashboard(mengambil semua transaksi user dari server )
+      async function loadDashboard() {
+        const res = await fetch("/api/transactions");
+        const data = await res.json();
 
-    if (!data.success) return (location.href = "/login");
+        if (!data.success) return;
 
-    document.getElementById("username").innerText = "Halo, " + data.user.username;
-}
-loadUser();
+        // menentukan bulan sekarang
+        const monthString = new Date().toLocaleString("id-ID", {
+          month: "long",
+          year: "numeric",
+        });
+        document.getElementById("month").innerText = monthString;
 
-// Fungsi Load Dashboard(mengambil semua transaksi user dari server )
-async function loadDashboard() {
-    const res = await fetch("/api/transactions");
-    const data = await res.json();
+        let income = 0,
+          outcome = 0;
+        const riw = document.getElementById("riwayat");
+        riw.innerHTML = "";
 
-    if (!data.success) return;
+        data.transactions.forEach((t) => {
+          const nominal = Number(t.nominal);
+          const tanggal = new Date(t.transactionDate).toLocaleDateString(
+            "id-ID"
+          );
 
-    // menentukan bulan sekarang 
-    const monthString = new Date().toLocaleString("id-ID", {
-        month: "long",
-        year: "numeric"
-    });
-    document.getElementById("month").innerText = monthString;
+          if (t.status === "INCOME") income += nominal;
+          else outcome += nominal;
 
-    let income = 0, outcome = 0;
-    const riw = document.getElementById("riwayat");
-    riw.innerHTML = "";
+          // menampilkan riwayat transaksi
+          const li = document.createElement("li");
+          li.innerHTML = `<b>[${
+            t.status
+          }]</b> ${tanggal} : Rp ${nominal.toLocaleString()} <br> ${
+            t.description
+          }`;
+          riw.appendChild(li);
+        });
 
-    data.transactions.forEach(t => {
-        const nominal = Number(t.nominal);
-        const tanggal = new Date(t.transactionDate).toLocaleDateString("id-ID");
+        document.getElementById("income").innerText =
+          "Rp " + income.toLocaleString();
+        document.getElementById("outcome").innerText =
+          "Rp " + outcome.toLocaleString();
+        document.getElementById("balance").innerText =
+          "Rp " + (income - outcome).toLocaleString();
+      }
+      loadDashboard();
 
-        if (t.status === "INCOME") income += nominal;
-        else outcome += nominal;
+      // Fungsi tambah Transaksi
+      // mengambil semua input dari form
+      async function tambahTransaksi() {
+        const amountInput = document.getElementById("amount");
+        const dateInput = document.getElementById("date");
+        const statusInput = document.getElementById("status");
+        const descInput = document.getElementById("description");
 
-        // menampilkan riwayat transaksi
-        const li = document.createElement("li");
-        li.innerHTML =
-            `<b>[${t.status}]</b> ${tanggal} : Rp ${nominal.toLocaleString()} <br> ${t.description}`;
-        riw.appendChild(li);
-    });
+        //VALIDASI BARU SESUAI INPUT YANG KOSONG
+        if (!amountInput.value && !dateInput.value) {
+          showNotif("Nominal dan tanggal wajib diisi!", "error");
+          return;
+        }
 
-    document.getElementById("income").innerText = "Rp " + income.toLocaleString();
-    document.getElementById("outcome").innerText = "Rp " + outcome.toLocaleString();
-    document.getElementById("balance").innerText = "Rp " + (income - outcome).toLocaleString();
-}
-loadDashboard();
+        if (!amountInput.value) {
+          showNotif("Nominal belum diisi!", "error");
+          return;
+        }
 
-// Fungsi tambah Transaksi
-// mengambil semua input dari form 
-async function tambahTransaksi() {
-const amountInput = document.getElementById("amount");
-const dateInput = document.getElementById("date");
-const statusInput = document.getElementById("status");
-const descInput = document.getElementById("description");
+        if (!dateInput.value) {
+          showNotif("Tanggal belum diisi!", "error");
+          return;
+        }
 
-  //VALIDASI BARU SESUAI INPUT YANG KOSONG
-if (!amountInput.value && !dateInput.value) {
-    showNotif("Nominal dan tanggal wajib diisi!", "error");
-    return;
-}
+        const cleanAmount = amountInput.value.replace(/\./g, "");
 
-if (!amountInput.value) {
-    showNotif("Nominal belum diisi!", "error");
-    return;
-}
+        //mengirim data ke server
+        const res = await fetch("/api/transaction/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: cleanAmount,
+            date: dateInput.value,
+            status: statusInput.value,
+            description: descInput.value,
+          }),
+        });
 
-if (!dateInput.value) {
-    showNotif("Tanggal belum diisi!", "error");
-    return;
-}
+        const data = await res.json();
+        showNotif(data.message, data.success ? "success" : "error");
 
+        loadDashboard();
+      }
 
-const cleanAmount = amountInput.value.replace(/\./g, "");
+      // Fungsi menmpilkan Notifikasi
+      function showNotif(message, type = "success") {
+        const box = document.getElementById("notifBox");
 
-//mengirim data ke server
-const res = await fetch("/api/transaction/add", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-    amount: cleanAmount,
-    date: dateInput.value,
-    status: statusInput.value,
-    description: descInput.value
-    })
-});
+        const div = document.createElement("div");
 
-const data = await res.json();
-showNotif(data.message, data.success ? "success" : "error");
+        div.innerText = message;
+        box.style.position = "fixed";
+        div.style.padding = "10px";
+        div.style.margin = "5px 0";
+        div.style.borderRadius = "5px";
+        div.style.color = "white"; //warna tulisan
+        div.style.background = type === "success" ? "#2ecc71" : "#e74c3c"; // warna backround
+        div.style.minWidth = "200px"; //biar kotak kelihatan rapi
 
-loadDashboard();
-}
+        box.appendChild(div);
 
-// Fungsi menmpilkan Notifikasi
-function showNotif(message, type = "success") {
-    const box = document.getElementById("notifBox");
+        setTimeout(() => {
+          div.style.opacity = "0";
+        }, 2000);
 
-    const div = document.createElement("div");
-    
-    div.innerText = message;
-    box.style.position = "fixed";
-    div.style.padding = "10px";
-    div.style.margin = "5px 0";
-    div.style.borderRadius = "5px";
-    div.style.color = "white"; //warna tulisan
-    div.style.background = type === "success" ? "#2ecc71" : "#e74c3c"; // warna backround
-    div.style.minWidth = "200px";     //biar kotak kelihatan rapi
-
-    box.appendChild(div);
-
-    setTimeout(() => {
-
-        div.style.opacity = "0";
-    }, 2000);
-
-    setTimeout(() => {
-        box.removeChild(div);
-    }, 2600);
-}
-
-</script>
-
-</body>
+        setTimeout(() => {
+          box.removeChild(div);
+        }, 2600);
+      }
+    </script>
+  </body>
 </html>
