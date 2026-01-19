@@ -139,44 +139,46 @@ app.get("/api/transactions", async (c) => {
 
 // Add/Tambah TRANSACTION 
 
-app.post("/api/transactions", async (c) => {
+app.post("/api/transaction/add", async (c) => {
   try {
-    const user = c.get("user"); // cek login
-    if (!user) {
-      return c.json({ success: false, message: "Belum login" });
+    const user = c.get("user");
+    console.log("USER:", user);
+
+    if (!user || !user.id) {
+      return c.json({
+        success: false,
+        message: "User tidak valid"
+      }, 401);
     }
 
     const body = await c.req.json();
+    const { amount, date, status, description } = body;
 
-    // Validasi nominal
-    let nominal = body.nominal;
-    if (!nominal) {
-      return c.json({ success: false, message: "Nominal wajib diisi" });
+    if (!amount || !date || !status) {
+      return c.json({
+        success: false,
+        message: "Data transaksi tidak lengkap"
+      }, 400);
     }
 
-    // Buang titik jika user format 10.000
-    nominal = nominal.toString().replace(/\./g, "");
-
-    // Validasi tanggal
-    let tanggal = body.transactionDate || new Date().toISOString();
-
-    // Simpan ke database
     await db.insert(transactions).values({
       userId: user.id,
-      nominal: Number(nominal),
-      transactionDate: new Date(tanggal),
-      status: body.status,
-      description: body.description || ""
+      nominal: Number(amount),
+      transactionDate: new Date(date),
+      status,
+      description,
     });
 
     return c.json({
       success: true,
       message: "Transaksi berhasil ditambahkan"
     });
-
   } catch (err) {
-    console.log(err);
-    return c.json({ success: false, message: "Gagal menambahkan transaksi" });
+    console.error("ADD TRANSACTION ERROR:", err);
+    return c.json({
+      success: false,
+      message: "Terjadi kesalahan server"
+    }, 500);
   }
 });
 
