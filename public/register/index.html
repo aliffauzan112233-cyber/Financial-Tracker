@@ -225,6 +225,17 @@ async function registerUser(){
     console.error(err);
   }
 }
+function register(){
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  if(username && password){
+    // simpan user
+    localStorage.setItem("username", username); // 👈 INI
+    location.href = "/dashboard";
+  }
+}
+
 </script>
 
 </body>

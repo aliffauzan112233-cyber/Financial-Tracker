@@ -281,7 +281,7 @@ display:block;
   </div>
 
   <div class="card">
-    <b>Tambah / Edit Transaksi</b>
+<b id="formTitle">Tambah Transaksi</b>
     <div class="form">
       <input id="amount" type="number" placeholder="Nominal">
       <input id="date" type="date">
@@ -297,12 +297,16 @@ display:block;
 </div>
 
 <script>
-let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+const username = localStorage.getItem("username");
+const txKey = "transactions_" + username;
+
+let transactions = JSON.parse(localStorage.getItem(txKey)) || [];
 let editIndex = null;
 
 function saveStorage(){
-  localStorage.setItem("transactions", JSON.stringify(transactions));
+  localStorage.setItem(txKey, JSON.stringify(transactions));
 }
+
 
 function showNotif(msg){
   const d=document.createElement("div");
@@ -359,7 +363,7 @@ function saveTx(){
   const tx={
     nominal:+amount.value,
     transactionDate:date.value,
-    status:status.value,
+    status:document.getElementById("status").value,
     description:description.value.trim()
   };
 
@@ -368,7 +372,9 @@ function saveTx(){
   saveStorage();
   amount.value=date.value=description.value="";
   render();
-  showNotif("Transaksi disimpan");
+  showNotif("Transaksi disimpan"),
+  document.getElementById("formTitle").innerText = "Tambah Transaksi";
+
 }
 
 
@@ -378,7 +384,10 @@ function editTx(i){
   date.value=t.transactionDate;
   status.value=t.status;
   description.value=t.description||"";
-  editIndex=i;
+  editIndex=i,
+  document.getElementById("formTitle").innerText = "Edit Transaksi";
+
+
 }
 
 

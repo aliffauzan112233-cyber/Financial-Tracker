@@ -216,6 +216,17 @@ async function login(){
     showNotif(data.message || "Login gagal","error");
   }
 }
+function login(){
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  // contoh validasi
+  if(username && password){
+    localStorage.setItem("username", username); // 👈 INI PENTING
+    location.href = "/dashboard";
+  }
+}
+
 </script>
 
 </body>
