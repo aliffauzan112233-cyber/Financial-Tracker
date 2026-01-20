@@ -1,121 +1,120 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Dashboard</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:'Poppins',sans-serif
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body{background:linear-gradient(135deg,#020617,#0f172a);color:#e5e7eb}
 
-body{
-  background:linear-gradient(135deg,#020617,#0f172a);
-  color:#e5e7eb;
-}
-
-/* ===== NOTIF ===== */
+/* ================= NOTIF ================= */
 #notifBox{
-  position:fixed;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:999;
+  position:fixed;top:20px;left:50%;
+  transform:translateX(-50%);z-index:999
 }
 .notif{
-  min-width:280px;
-  padding:14px 20px;
-  margin-bottom:10px;
+  padding:14px 22px;
   border-radius:16px;
-  font-size:15px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
   font-weight:500;
-  color:white;
-  text-align:center;
-  box-shadow:0 15px 35px rgba(0,0,0,.45);
-  animation:slideIn .4s ease, fadeOut .4s ease 2.2s forwards;
+  margin-bottom:10px;
+  box-shadow:0 15px 35px rgba(0,0,0,.4)
 }
 
-/* ===== HEADER ===== */
+/* ================= HEADER ================= */
 .header{
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:18px 28px;
-  background:rgba(255,255,255,.05);
+  background:rgba(255,255,255,.05)
 }
-.header h1{
-  font-size:18px;
-  font-weight:600;
-}
+.header h1{font-size:18px;font-weight:600}
 .header button{
-  padding:8px 18px;
-  font-size:14px;
+  background:linear-gradient(135deg,#ef4444,#dc2626);
   border:none;
-  border-radius:12px;
-  background:#ef4444;
+  padding:10px 20px;
   color:white;
-  cursor:pointer;
+  border-radius:14px;
+  font-weight:500;
+  cursor:pointer
 }
 
-/* ===== LAYOUT ===== */
+/* ================= LAYOUT ================= */
 .container{
   max-width:1200px;
   margin:auto;
   padding:24px;
   display:grid;
-  grid-template-columns:1fr 400px;
+  grid-template-columns:1fr 420px;
   gap:24px;
 }
 
-/* ===== CARD ===== */
+/* ================= CARD ================= */
 .card{
   background:rgba(255,255,255,.08);
-  border-radius:22px;
   padding:22px;
+  border-radius:22px;
 }
-.card > b{
-  font-size:18px;
-  font-weight:600;
-}
+.card>b{font-size:18px}
 
-/* ===== SUMMARY ===== */
+/* ================= SUMMARY ================= */
 .summary{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:16px;
-  margin-bottom:22px;
+  margin-bottom:20px
+}
+.summary div{
+  background:rgba(255,255,255,.1);
+  padding:18px;
+  border-radius:18px
+}
+.summary b{
+  font-size:24px;
+  margin-top:6px;
+  display:block
 }
 .summary div{
   background:rgba(255,255,255,.1);
   padding:18px;
   border-radius:18px;
-  font-size:15px;
-}
-.summary b{
-  font-size:22px;
-  display:block;
-  margin-top:6px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0; /* WAJIB */
 }
 
-/* ===== FORM ===== */
+.summary b{
+font-size:22px;
+margin-top:6px;
+display:block;
+  white-space:nowrap;        /* ❗ TIDAK TURUN BARIS */
+  overflow:hidden;           /* ❗ POTONG JIKA PANJANG */
+  text-overflow:ellipsis;    /* ❗ TITIK-TITIK */
+}
+.summary b{
+  font-size:clamp(18px, 2vw, 24px);
+}
+
+
+
+/* ================= FORM ================= */
 .form{
   display:flex;
   flex-direction:column;
   gap:16px;
-  margin-top:16px;
+  margin-top:16px
 }
 .form input,.form select{
-  padding:16px 18px;
+  padding:16px;
   border:none;
   border-radius:16px;
-  background:#f8fafc;
-  font-size:15px;
+  font-size:15px
 }
 .form button{
   padding:16px;
@@ -123,104 +122,125 @@ body{
   border-radius:18px;
   background:linear-gradient(135deg,#22d3ee,#6366f1);
   color:white;
-  font-weight:600;
   font-size:16px;
-  cursor:pointer;
+  font-weight:600;
+  cursor:pointer
 }
 
-/* ===== RIWAYAT ===== */
-#riwayat{
-  max-height:460px;
-  overflow:auto;
-  margin-top:16px;
-}
+/* ================= RIWAYAT ================= */
+#riwayat{margin-top:16px}
 #riwayat li{
   list-style:none;
   background:rgba(255,255,255,.1);
+  padding:18px 20px;
   border-radius:20px;
-  padding:18px;
-  margin-bottom:16px;
+  margin-bottom:14px;
+  transition:.25s
+}
+#riwayat li:hover{
+  background:rgba(255,255,255,.14)
 }
 
-/* BARIS ATAS */
 .tx-top{
   display:flex;
   justify-content:space-between;
-  align-items:center;
-  margin-bottom:10px;
+  align-items:center
 }
 .tx-amount{
-  font-size:20px;
-  font-weight:600;
+  font-size:22px;
+  font-weight:600
 }
 
-/* BADGE */
 .badge{
   padding:6px 14px;
   border-radius:14px;
-  font-size:13px;
-  font-weight:500;
+  font-size:14px;
+  font-weight:500
 }
 .in{background:#22c55e}
 .out{background:#ef4444}
 
-/* TANGGAL & DESKRIPSI */
-.tx-date{
-  font-size:13px;
-  opacity:.85;
-  margin-bottom:6px;
-}
-.tx-desc{
-  font-size:14px;
-  line-height:1.5;
-  opacity:.95;
-}
-
-/* ACTION */
-.actions{
-  margin-top:12px;
-}
-.actions button{
-  font-size:12px;
-  padding:7px 14px;
-  border:none;
-  border-radius:12px;
-  cursor:pointer;
-}
-.edit{background:#22c55e}
-.delete{background:#ef4444;margin-left:10px}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .container{grid-template-columns:1fr}
-}
-.tx-middle{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
+/* ===== BARIS BAWAH RAPi ===== */
+.tx-bottom{
+  display:grid;
+  grid-template-columns:140px 1fr auto;
   gap:14px;
-  margin-top:8px;
+  align-items:center;
+  margin-top:12px
 }
-
 .tx-date{
-  font-size:13px;
-  opacity:.85;
-  min-width:110px;
-}
-
-.tx-desc{
-  flex:1;
   font-size:14px;
+  opacity:.85
+}
+.tx-desc{
+  font-size:15px;
   white-space:nowrap;
   overflow:hidden;
-  text-overflow:ellipsis;
+  text-overflow:ellipsis
 }
-
 .actions{
   display:flex;
-  gap:8px;
+  gap:8px
 }
+.actions button{
+  border:none;
+  padding:8px 14px;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:500;
+  color:white;
+  cursor:pointer
+}
+.edit{background:#22c55e}
+.delete{background:#ef4444}
 
+/* ================= LOGOUT MODAL ================= */
+#logoutModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000
+}
+.modal{
+  background:#020617;
+  padding:28px;
+  border-radius:24px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.6)
+}
+.modal h2{
+  font-size:20px;
+  margin-bottom:10px
+}
+.modal p{
+  font-size:14px;
+  opacity:.85;
+  margin-bottom:22px
+}
+.modal-actions{
+  display:flex;
+  gap:12px
+}
+.modal-actions button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  font-weight:600;
+  cursor:pointer
+}
+.cancel{background:#334155;color:white}
+.confirm{background:linear-gradient(135deg,#ef4444,#dc2626);color:white}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:900px){
+  .container{grid-template-columns:1fr}
+  .tx-bottom{grid-template-columns:1fr}
+}
 </style>
 </head>
 
@@ -228,9 +248,21 @@ body{
 
 <div id="notifBox"></div>
 
+<!-- LOGOUT MODAL -->
+<div id="logoutModal">
+  <div class="modal">
+    <h2>Logout</h2>
+    <p>Apakah kamu yakin ingin keluar?</p>
+    <div class="modal-actions">
+      <button class="cancel" onclick="closeLogout()">Batal</button>
+      <button class="confirm" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+</div>
+
 <div class="header">
   <h1>Halo 👋</h1>
-  <button onclick="logout()">Logout</button>
+  <button onclick="openLogout()">Logout</button>
 </div>
 
 <div class="container">
@@ -257,7 +289,7 @@ body{
         <option value="INCOME">Pemasukan</option>
         <option value="OUTCOME">Pengeluaran</option>
       </select>
-      <input id="description" placeholder="Keterangan (opsional)">
+      <input id="description" placeholder="Keterangan">
       <button onclick="saveTx()">Simpan</button>
     </div>
   </div>
@@ -273,96 +305,83 @@ function saveStorage(){
 }
 
 function showNotif(msg){
-  const d = document.createElement("div");
-  d.className = "notif";
-  d.style.background = "linear-gradient(135deg,#22c55e,#16a34a)";
-  d.innerText = msg;
+  const d=document.createElement("div");
+  d.className="notif";
+  d.innerText=msg;
   notifBox.appendChild(d);
-  setTimeout(()=>d.remove(),2600);
+  setTimeout(()=>d.remove(),2500);
 }
 
-function logout(){
+/* ===== LOGOUT ===== */
+function openLogout(){ logoutModal.style.display="flex" }
+function closeLogout(){ logoutModal.style.display="none" }
+function doLogout(){
   showNotif("Logout berhasil");
   setTimeout(()=>location.href="/login",1200);
 }
 
-/* ================= RENDER ================= */
+/* ===== RENDER ===== */
 function render(){
-  let inc = 0;
-  let out = 0;
-  riwayat.innerHTML = "";
+  let inc=0,out=0;
+  riwayat.innerHTML="";
 
   transactions.forEach((t,i)=>{
-    const nominal = Number(t.nominal) || 0;
+    t.status==="INCOME" ? inc+=t.nominal : out+=t.nominal;
 
-    if(t.status === "INCOME") inc += nominal;
-    if(t.status === "OUTCOME") out += nominal;
-
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <div class="tx-top">
-        <span class="badge ${t.status === "INCOME" ? "in" : "out"}">
-          ${t.status === "INCOME" ? "Pemasukan" : "Pengeluaran"}
-        </span>
-        <span class="tx-amount">Rp ${nominal.toLocaleString("id-ID")}</span>
-      </div>
-
-      <div class="tx-middle">
-        <span class="tx-date">${new Date(t.transactionDate).toLocaleDateString("id-ID")}</span>
-        <span class="tx-desc">${t.description || "-"}</span>
-
-        <div class="actions">
-          <button class="edit" onclick="editTx(${i})">Edit</button>
-          <button class="delete" onclick="deleteTx(${i})">Hapus</button>
+    riwayat.innerHTML+=`
+      <li>
+        <div class="tx-top">
+          <span class="badge ${t.status==="INCOME"?"in":"out"}">
+            ${t.status==="INCOME"?"Pemasukan":"Pengeluaran"}
+          </span>
+          <span class="tx-amount">Rp ${t.nominal.toLocaleString("id-ID")}</span>
         </div>
-      </div>
-    `;
-    riwayat.appendChild(li);
+
+        <div class="tx-bottom">
+          <span class="tx-date">${new Date(t.transactionDate).toLocaleDateString("id-ID")}</span>
+          <span class="tx-desc">${t.description||"-"}</span>
+          <div class="actions">
+            <button class="edit" onclick="editTx(${i})">Edit</button>
+            <button class="delete" onclick="deleteTx(${i})">Hapus</button>
+          </div>
+        </div>
+      </li>`;
   });
 
-  income.innerText  = "Rp " + inc.toLocaleString("id-ID");
-  outcome.innerText = "Rp " + out.toLocaleString("id-ID");
-  balance.innerText = "Rp " + (inc - out).toLocaleString("id-ID");
+  income.innerText="Rp "+inc.toLocaleString("id-ID");
+  outcome.innerText="Rp "+out.toLocaleString("id-ID");
+  balance.innerText="Rp "+(inc-out).toLocaleString("id-ID");
 }
 
-/* ================= SIMPAN ================= */
 function saveTx(){
-  if(!amount.value) return showNotif("Nominal wajib diisi");
-  if(!date.value) return showNotif("Tanggal wajib diisi");
+  if(!amount.value||!date.value) return showNotif("Nominal & tanggal wajib diisi");
 
-  const tx = {
-    nominal: Number(amount.value),
-    transactionDate: date.value,
-    status: status.value, // ← LANGSUNG SESUAI PILIHAN
-    description: description.value.trim()
+  const tx={
+    nominal:+amount.value,
+    transactionDate:date.value,
+    status:status.value,
+    description:description.value.trim()
   };
 
-  if(editIndex !== null){
-    transactions[editIndex] = tx;
-  }else{
-    transactions.unshift(tx);
-  }
-
-  editIndex = null;
+  editIndex!==null ? transactions[editIndex]=tx : transactions.unshift(tx);
+  editIndex=null;
   saveStorage();
-  amount.value = "";
-  date.value = "";
-  description.value = "";
+  amount.value=date.value=description.value="";
   render();
-  showNotif("Transaksi berhasil disimpan");
+  showNotif("Transaksi disimpan");
 }
 
-/* ================= EDIT ================= */
+
 function editTx(i){
-  const t = transactions[i];
-  amount.value = t.nominal;
-  date.value = t.transactionDate;
-  status.value = t.status;
-  description.value = t.description || "";
-  editIndex = i;
+  const t=transactions[i];
+  amount.value=t.nominal;
+  date.value=t.transactionDate;
+  status.value=t.status;
+  description.value=t.description||"";
+  editIndex=i;
 }
 
-/* ================= DELETE ================= */
+
 function deleteTx(i){
   transactions.splice(i,1);
   saveStorage();
