@@ -1,102 +1,219 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:radial-gradient(circle at top left,#6a85ff,#1e1b4b);
+  overflow:hidden;
+}
+
+/* Animated gradient blobs */
+.bg{
+  position:absolute;
+  width:420px;
+  height:420px;
+  border-radius:50%;
+  filter:blur(120px);
+  opacity:.6;
+}
+.bg.one{background:#38bdf8; top:-120px; left:-120px;}
+.bg.two{background:#a855f7; bottom:-120px; right:-120px;}
+
+#notif{
+  position:fixed;
+  top:-80px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:14px 24px;
+  color:white;
+  border-radius:12px;
+  font-size:14px;
+  font-weight:500;
+  box-shadow:0 10px 30px rgba(0,0,0,.4);
+  transition:.5s;
+  z-index:100;
+}
+
+/* Card */
+.login-box{
+  width:100%;
+  max-width:400px;
+  padding:40px 32px;
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(18px);
+  border-radius:22px;
+  border:1px solid rgba(255,255,255,.25);
+  box-shadow:0 30px 60px rgba(0,0,0,.35);
+  color:white;
+  animation:pop .7s ease;
+}
+
+@keyframes pop{
+  from{opacity:0; transform:scale(.9);}
+  to{opacity:1; transform:scale(1);}
+}
+
+.login-box h1{
+  text-align:center;
+  margin-bottom:30px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.input-group{
+  margin-bottom:20px;
+}
+
+.input-group label{
+  font-size:13px;
+  opacity:.85;
+}
+
+.input-group input{
+  width:100%;
+  margin-top:8px;
+  padding:13px 14px;
+  border-radius:14px;
+  border:none;
+  outline:none;
+  font-size:14px;
+  background:rgba(255,255,255,.85);
+}
+
+.input-group input:focus{
+  box-shadow:0 0 0 3px rgba(56,189,248,.5);
+}
+
+button{
+  width:100%;
+  margin-top:10px;
+  padding:13px;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  background:linear-gradient(135deg,#38bdf8,#6366f1);
+  color:white;
+  transition:.3s;
+}
+
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 30px rgba(56,189,248,.5);
+}
+
+p{
+  text-align:center;
+  margin-top:20px;
+  font-size:14px;
+}
+
+a{
+  color:#38bdf8;
+  text-decoration:none;
+  font-weight:600;
+}
+
+a:hover{ text-decoration:underline; }
+
+@media(max-width:480px){
+  .login-box{margin:0 15px;}
+}
+</style>
 </head>
 
 <body>
 
-  <!-- NOTIFIKASI -->
+<div class="bg one"></div>
+<div class="bg two"></div>
+
 <div id="notif"></div>
 
 <div class="login-box">
-
-  <h1>Login</h1>
-
-  <div class="input-group">
-    <label for="username">Username</label><br>
-    <input id="username" autocomplete="off" placeholder="Masukkan username...">
-  </div><br>
+  <h1>LOGIN</h1>
 
   <div class="input-group">
-    <label for="password">Password</label><br>
-    <input id="password" type="password" autocomplete="new-password" placeholder="Masukkan password...">
+    <label>Username</label>
+    <input id="username" placeholder="Masukkan username">
   </div>
 
-  <button onclick="login()">Login</button>
+  <div class="input-group">
+    <label>Password</label>
+    <input id="password" type="password" placeholder="Masukkan password">
+  </div>
 
-  <p>Belum punya akun? <a href="/register">Register</a></p>
+  <button onclick="login()">Masuk</button>
 
+  <p>Belum punya akun? <a href="/register">Daftar</a></p>
 </div>
 
 <script>
-//Script untuk mengosongkan input saat halaman dibuka
-window.onload = () => {
-  username.value = "";
-  password.value = "";
+window.onload = ()=>{
+  username.value="";
+  password.value="";
 };
 
-// Fungsi showNotif() untuk menampilkan Notifikasi
-function showNotif(text, success = true) {
+function showNotif(text, type="success"){
   const box = document.getElementById("notif");
   box.innerText = text;
 
+  box.style.background =
+    type==="success" ? "#22c55e" :
+    type==="error" ? "#ef4444" : "#f59e0b";
 
-  box.style.background = success ? "#2ecc71" : "#e74c3c";
+  box.style.top = "20px";
 
-  // css untuk Notifikasi
-  box.style.position = "fixed";
-  box.style.top = "15px";
-  box.style.left = "50%";
-  box.style.transform = "translateX(-50%)";
-  box.style.padding = "10px 20px";
-  box.style.color = "white";
-  box.style.borderRadius = "5px";
-  box.style.display = "block";
-
-  setTimeout(() => box.style.display = "none", 2000);// Auto hilang 2 detik
+  setTimeout(()=> box.style.top="-80px",2500);
 }
 
-// Ambil value input 
-// fungsi trim() menghapus spasi di depan/belakang.
-async function login() {
+async function login(){
   const user = username.value.trim();
   const pass = password.value.trim();
 
-  // validasi input kosong 
-  if (!user && !pass) {
-    showNotif("Isi username & password terlebih dahulu!", false);
+  if(!user && !pass){
+    showNotif("Username & Password wajib diisi","error");
+    return;
+  }
+  if(!user){
+    showNotif("Username belum diisi","error");
+    return;
+  }
+  if(!pass){
+    showNotif("Password belum diisi","error");
     return;
   }
 
-  if (!user) {
-    showNotif("Isi username terlebih dahulu!", false);
-    return;
-  }
-
-  if (!pass) {
-    showNotif("Isi password terlebih dahulu!", false);
-    return;
-  }
-
-  // kirim ke server untuk login 
-  const res = await fetch("/api/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: user, password: pass })
+  const res = await fetch("/api/login",{
+    method:"POST",
+    headers:{ "Content-Type":"application/json" },
+    body:JSON.stringify({ username:user, password:pass })
   });
 
-  // ambil Respawn dari server
   const data = await res.json();
 
-  showNotif(data.message, data.success);
-
-  if (data.success) {
-    setTimeout(() => {
-      location.href = "/dashboard";
-    }, 1200);
+  if(data.success){
+    showNotif("Login berhasil! Mengalihkan...","success");
+    setTimeout(()=>location.href="/dashboard",1200);
+  }else{
+    showNotif(data.message || "Login gagal","error");
   }
 }
 </script>
