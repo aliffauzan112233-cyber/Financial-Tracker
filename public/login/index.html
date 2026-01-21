@@ -13,6 +13,7 @@
   margin:0;
   padding:0;
   font-family:'Poppins',sans-serif;
+  -webkit-tap-highlight-color:transparent;
 }
 
 body{
@@ -20,11 +21,11 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  background:radial-gradient(circle at top left,#6a85ff,#1e1b4b);
+  background:radial-gradient(circle at top right,#6366f1,#1e1b4b);
   overflow:hidden;
 }
 
-/* Animated gradient blobs */
+/* ===== BACKGROUND BLOB (SAMA DENGAN REGISTER) ===== */
 .bg{
   position:absolute;
   width:420px;
@@ -33,9 +34,10 @@ body{
   filter:blur(120px);
   opacity:.6;
 }
-.bg.one{background:#38bdf8; top:-120px; left:-120px;}
+.bg.one{background:#22d3ee; top:-120px; left:-120px;}
 .bg.two{background:#a855f7; bottom:-120px; right:-120px;}
 
+/* ===== NOTIF ===== */
 #notif{
   position:fixed;
   top:-80px;
@@ -51,10 +53,10 @@ body{
   z-index:100;
 }
 
-/* Card */
+/* ===== LOGIN CARD (SAMA DENGAN REGISTER) ===== */
 .login-box{
   width:100%;
-  max-width:400px;
+  max-width:420px;
   padding:40px 32px;
   background:rgba(255,255,255,.12);
   backdrop-filter:blur(18px);
@@ -77,7 +79,9 @@ body{
   letter-spacing:1px;
 }
 
+/* ===== INPUT GROUP (SAMA DENGAN REGISTER) ===== */
 .input-group{
+  position:relative;
   margin-bottom:20px;
 }
 
@@ -95,12 +99,39 @@ body{
   outline:none;
   font-size:14px;
   background:rgba(255,255,255,.85);
+  transition:.4s ease;
+}
+
+/* glow */
+.input-group::before{
+  content:"";
+  position:absolute;
+  inset:-2px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#22d3ee,#6366f1,#a855f7);
+  opacity:0;
+  filter:blur(10px);
+  transition:.4s;
+  z-index:-1;
+}
+
+.input-group:hover::before{
+  opacity:.6;
+}
+
+.input-group:hover input{
+  transform:translateY(-2px);
+  box-shadow:0 10px 25px rgba(34,211,238,.35);
 }
 
 .input-group input:focus{
-  box-shadow:0 0 0 3px rgba(56,189,248,.5);
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:
+    0 0 0 2px rgba(34,211,238,.8),
+    0 18px 35px rgba(99,102,241,.5);
 }
 
+/* ===== BUTTON ===== */
 button{
   width:100%;
   margin-top:10px;
@@ -110,14 +141,14 @@ button{
   font-size:16px;
   font-weight:600;
   cursor:pointer;
-  background:linear-gradient(135deg,#38bdf8,#6366f1);
+  background:linear-gradient(135deg,#22d3ee,#6366f1);
   color:white;
   transition:.3s;
 }
 
 button:hover{
   transform:translateY(-3px);
-  box-shadow:0 12px 30px rgba(56,189,248,.5);
+  box-shadow:0 12px 30px rgba(34,211,238,.5);
 }
 
 p{
@@ -127,7 +158,7 @@ p{
 }
 
 a{
-  color:#38bdf8;
+  color:#22d3ee;
   text-decoration:none;
   font-weight:600;
 }
@@ -180,7 +211,6 @@ function showNotif(text, type="success"){
     type==="error" ? "#ef4444" : "#f59e0b";
 
   box.style.top = "20px";
-
   setTimeout(()=> box.style.top="-80px",2500);
 }
 
@@ -201,29 +231,24 @@ async function login(){
     return;
   }
 
-  const res = await fetch("/api/login",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify({ username:user, password:pass })
-  });
+  try{
+    const res = await fetch("/api/login",{
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ username:user, password:pass })
+    });
 
-  const data = await res.json();
+    const data = await res.json();
 
-  if(data.success){
-    showNotif("Login berhasil! Mengalihkan...","success");
-    setTimeout(()=>location.href="/dashboard",1200);
-  }else{
-    showNotif(data.message || "Login gagal","error");
-  }
-}
-function login(){
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-
-  // contoh validasi
-  if(username && password){
-    localStorage.setItem("username", username); // 👈 INI PENTING
-    location.href = "/dashboard";
+    if(data.success){
+      localStorage.setItem("username", user);
+      showNotif("Login berhasil! Mengalihkan...","success");
+      setTimeout(()=>location.href="/dashboard",1500);
+    }else{
+      showNotif(data.message || "Login gagal","error");
+    }
+  }catch{
+    showNotif("Server tidak merespon","error");
   }
 }
 

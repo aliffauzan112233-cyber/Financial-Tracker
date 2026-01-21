@@ -241,12 +241,67 @@ display:block;
   .container{grid-template-columns:1fr}
   .tx-bottom{grid-template-columns:1fr}
 }
+.fade-up{
+  opacity:0;
+  transform:translateY(30px);
+  animation:fadeUp .8s ease forwards;
+}
+
+@keyframes fadeUp{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+.card{
+  background:rgba(255,255,255,.12);
+  backdrop-filter:blur(16px);
+  border-radius:18px;
+  padding:20px;
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  transition:.4s ease;
+}
+
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 30px 60px rgba(56,189,248,.45);
+}
+.transaksi{
+  opacity:0;
+  transform:translateX(-20px);
+  animation:slideIn .5s ease forwards;
+}
+
+.transaksi:nth-child(1){animation-delay:.1s}
+.transaksi:nth-child(2){animation-delay:.2s}
+.transaksi:nth-child(3){animation-delay:.3s}
+
+@keyframes slideIn{
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+button{
+  transition:.3s;
+}
+
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(56,189,248,.5);
+}
+
+button:active{
+  transform:scale(.95);
+}
+
 </style>
 </head>
 
 <body>
 
-<div id="notifBox"></div>
+  <div id="notifBox"></div>
 
 <!-- LOGOUT MODAL -->
 <div id="logoutModal">
@@ -261,7 +316,7 @@ display:block;
 </div>
 
 <div class="header">
-  <h1>Halo 👋</h1>
+  <h3>DuitKu</h3>
   <button onclick="openLogout()">Logout</button>
 </div>
 
