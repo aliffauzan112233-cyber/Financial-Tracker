@@ -23,7 +23,7 @@ body{
   overflow:hidden;
 }
 
-/* ===== LIGHT BEHIND DOOR ===== */
+
 .light{
   position:absolute;
   width:260px;
@@ -39,14 +39,14 @@ body{
   to{opacity:.45;}
 }
 
-/* ===== SCENE ===== */
+
 .scene{
   position:relative;
   width:280px;
   height:420px;
 }
 
-/* ===== DOOR FRAME ===== */
+
 .frame{
   position:absolute;
   width:180px;
@@ -59,7 +59,7 @@ body{
   box-shadow:0 30px 80px rgba(0,0,0,.6);
 }
 
-/* ===== DOOR ===== */
+
 .door{
   position:absolute;
   width:180px;
@@ -70,7 +70,7 @@ body{
   animation:openDoor 1.6s cubic-bezier(.25,.8,.25,1) forwards;
 }
 
-/* door knob */
+
 .door::after{
   content:"";
   position:absolute;
@@ -88,7 +88,7 @@ body{
   100%{transform:rotateY(-75deg);}
 }
 
-/* ===== PERSON SILHOUETTE ===== */
+/* PERSON SILHOUETTE */
 .person{
   position:absolute;
   bottom:40px;
@@ -123,7 +123,7 @@ body{
   }
 }
 
-/* ===== FLOOR SHADOW ===== */
+/* FLOOR SHADOW  */
 .shadow{
   position:absolute;
   bottom:20px;
@@ -135,7 +135,7 @@ body{
   transform:translateX(-50%);
 }
 
-/* ===== LOADER ===== */
+/* LOADER */
 .loader{
   position:absolute;
   bottom:-60px;
@@ -170,7 +170,7 @@ body{
 </div>
 
 <script>
-/* === LOGOUT LOGIC (TIDAK DIUBAH) === */
+
 (async ()=>{
   try{
     await fetch('/api/logout',{method:'POST'});

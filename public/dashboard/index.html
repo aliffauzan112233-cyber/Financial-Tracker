@@ -11,7 +11,7 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
 body{background:linear-gradient(135deg,#020617,#0f172a);color:#e5e7eb}
 
-/* ================= NOTIF ================= */
+/* NOTIFIKASI */
 #notifBox{
   position:fixed;top:20px;left:50%;
   transform:translateX(-50%);z-index:999
@@ -25,7 +25,7 @@ body{background:linear-gradient(135deg,#020617,#0f172a);color:#e5e7eb}
   box-shadow:0 15px 35px rgba(0,0,0,.4)
 }
 
-/* ================= HEADER ================= */
+/* HEADER */
 .header{
   display:flex;
   justify-content:space-between;
@@ -44,7 +44,7 @@ body{background:linear-gradient(135deg,#020617,#0f172a);color:#e5e7eb}
   cursor:pointer
 }
 
-/* ================= LAYOUT ================= */
+/* LAYOUT */
 .container{
   max-width:1200px;
   margin:auto;
@@ -54,7 +54,7 @@ body{background:linear-gradient(135deg,#020617,#0f172a);color:#e5e7eb}
   gap:24px;
 }
 
-/* ================= CARD ================= */
+/* CARD */
 .card{
   background:rgba(255,255,255,.08);
   padding:22px;
@@ -62,7 +62,7 @@ body{background:linear-gradient(135deg,#020617,#0f172a);color:#e5e7eb}
 }
 .card>b{font-size:18px}
 
-/* ================= SUMMARY ================= */
+/* SUMMARY */
 .summary{
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -86,16 +86,16 @@ body{background:linear-gradient(135deg,#020617,#0f172a);color:#e5e7eb}
   display:flex;
   flex-direction:column;
   justify-content:center;
-  min-width:0; /* WAJIB */
+  min-width:0; 
 }
 
 .summary b{
 font-size:22px;
 margin-top:6px;
 display:block;
-  white-space:nowrap;        /* ❗ TIDAK TURUN BARIS */
-  overflow:hidden;           /* ❗ POTONG JIKA PANJANG */
-  text-overflow:ellipsis;    /* ❗ TITIK-TITIK */
+  white-space:nowrap;        /* TIDAK TURUN BARIS */
+  overflow:hidden;           /* POTONG JIKA PANJANG */
+  text-overflow:ellipsis;    /* TITIK-TITIK */
 }
 .summary b{
   font-size:clamp(18px, 2vw, 24px);
@@ -103,7 +103,7 @@ display:block;
 
 
 
-/* ================= FORM ================= */
+/* FORM  */
 .form{
   display:flex;
   flex-direction:column;
@@ -127,7 +127,7 @@ display:block;
   cursor:pointer
 }
 
-/* ================= RIWAYAT ================= */
+/*  RIWAYAT  */
 #riwayat{margin-top:16px}
 #riwayat li{
   list-style:none;
@@ -160,7 +160,7 @@ display:block;
 .in{background:#22c55e}
 .out{background:#ef4444}
 
-/* ===== BARIS BAWAH RAPi ===== */
+/* BARIS BAWAH RAPi  */
 .tx-bottom{
   display:grid;
   grid-template-columns:140px 1fr auto;
@@ -194,7 +194,7 @@ display:block;
 .edit{background:#22c55e}
 .delete{background:#ef4444}
 
-/* ================= LOGOUT MODAL ================= */
+/*  LOGOUT MODAL  */
 #logoutModal{
   position:fixed;
   inset:0;
@@ -236,7 +236,7 @@ display:block;
 .cancel{background:#334155;color:white}
 .confirm{background:linear-gradient(135deg,#ef4444,#dc2626);color:white}
 
-/* ================= RESPONSIVE ================= */
+/*  RESPONSIVE  */
 @media(max-width:900px){
   .container{grid-template-columns:1fr}
   .tx-bottom{grid-template-columns:1fr}
@@ -295,14 +295,14 @@ button:hover{
 button:active{
   transform:scale(.95);
 }
-/* ================= ULTRA PREMIUM DUITKU LOGO ================= */
+/* DUITKU LOGO  */
 .logo-pulse{
   display:flex;
   align-items:center;
   gap:10px;
 }
 
-/* ===== KOIN HIDUP ===== */
+/* KOIN HIDUP */
 .logo-pulse .coin{
   width:14px;
   height:14px;
@@ -310,7 +310,7 @@ button:active{
   background:radial-gradient(circle at 30% 30%, #22d3ee,#6366f1,#22d3ee);
   animation:pulseCoin 2.4s infinite ease-in-out;
   box-shadow:
-    0 0 10px rgba(160, 223, 250, 0.9),
+    0 0 10px rgba(255, 255, 255, 0.9),
     0 0 28px rgba(99,102,241,.9);
 }
 
@@ -320,39 +320,33 @@ button:active{
   100%{transform:scale(1)}
 }
 
-/* ===== BRAND TEXT ===== */
+/* BRAND TEXT */
 .logo-pulse .brand{
   display:flex;
   align-items:center;
   font-size:28px;
   font-weight:900;
-  letter-spacing:-0.5px; /* ❗ bikin nyatu */
+  letter-spacing:-0.5px; /*agar tulisan nyatu*/
 }
 
-/* ===== DUIT ===== */
-.logo-pulse .duit{
-  background:linear-gradient(135deg,#22d3ee,#6366f1,#22d3ee);
-  background-size:200% 200%;
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  animation:flowText 4s infinite linear;
-  text-shadow:0 0 30px rgba(99,102,241,.9);
+/* CSS DUIT*/
+.logo-pulse .duit {
+    background: linear-gradient(135deg, #22d3ee, #6366f1, #22d3ee);
+    background-size: 200% auto; /* 200% agar gradasi bisa bergerak */
+    
+  
+    -webkit-background-clip: text;
+    background-clip: text; 
+    -webkit-text-fill-color: transparent;
+    
+    animation: flowText 4s infinite linear;
+    text-shadow: 0 0 30px rgba(99, 102, 241, 0.9);
 }
 
-@keyframes flowText{
-  0%{background-position:0% 50%}
-  50%{background-position:100% 50%}
-  100%{background-position:0% 50%}
-}
-
-.logo-pulse .ku{
-  margin-left:2px;
-  font-size:26px;
-  font-weight:900;
-  background:linear-gradient(135deg,#f8fafc,#c7d2fe);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  position:relative;
+@keyframes flowText {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 /* glow lembut */
@@ -450,7 +444,7 @@ function showNotif(msg){
   setTimeout(()=>d.remove(),2500);
 }
 
-/* ===== LOGOUT ===== */
+/* Bagian LOGOUT  */
 function openLogout(){ logoutModal.style.display="flex" }
 function closeLogout(){ logoutModal.style.display="none" }
 function doLogout(){
@@ -458,7 +452,7 @@ function doLogout(){
   setTimeout(()=>location.href="/login",1200);
 }
 
-/* ===== RENDER ===== */
+/* Bagian RENDER */
 function render(){
   let inc=0,out=0;
   riwayat.innerHTML="";
