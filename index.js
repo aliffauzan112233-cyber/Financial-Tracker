@@ -11,6 +11,8 @@ import { fileURLToPath } from 'url'
 import { db } from './db/index.js'
 import { users, transactions } from './db/schema.js'
 import { eq } from 'drizzle-orm'
+import { serveStatic } from '@hono/node-server/serve-static'
+
 
 // setup folder dan server
 const __filename = fileURLToPath(import.meta.url)
@@ -18,6 +20,13 @@ const __dirname = path.dirname(__filename)
 
 const app = new Hono()
 const SECRET = process.env.JWT_SECRET || 'rahasia'
+// ================= STATIC FILE (LOGO, CSS, IMAGE) =================
+app.use(
+  '/public/*',
+  serveStatic({
+    root: './'
+  })
+)
 
 
 // Fungsi untuk memuat HTML  
@@ -181,6 +190,7 @@ app.post("/api/transaction/add", async (c) => {
     }, 500);
   }
 });
+
 
 
 

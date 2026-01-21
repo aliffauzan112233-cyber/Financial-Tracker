@@ -295,11 +295,82 @@ button:hover{
 button:active{
   transform:scale(.95);
 }
+/* ================= ULTRA PREMIUM DUITKU LOGO ================= */
+.logo-pulse{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* ===== KOIN HIDUP ===== */
+.logo-pulse .coin{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, #22d3ee,#6366f1,#22d3ee);
+  animation:pulseCoin 2.4s infinite ease-in-out;
+  box-shadow:
+    0 0 10px rgba(160, 223, 250, 0.9),
+    0 0 28px rgba(99,102,241,.9);
+}
+
+@keyframes pulseCoin{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.4)}
+  100%{transform:scale(1)}
+}
+
+/* ===== BRAND TEXT ===== */
+.logo-pulse .brand{
+  display:flex;
+  align-items:center;
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-0.5px; /* ❗ bikin nyatu */
+}
+
+/* ===== DUIT ===== */
+.logo-pulse .duit{
+  background:linear-gradient(135deg,#22d3ee,#6366f1,#22d3ee);
+  background-size:200% 200%;
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:flowText 4s infinite linear;
+  text-shadow:0 0 30px rgba(99,102,241,.9);
+}
+
+@keyframes flowText{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+.logo-pulse .ku{
+  margin-left:2px;
+  font-size:26px;
+  font-weight:900;
+  background:linear-gradient(135deg,#f8fafc,#c7d2fe);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  position:relative;
+}
+
+/* glow lembut */
+.logo-pulse .ku::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  filter:blur(14px);
+  background:rgba(199,210,254,.45);
+  opacity:.6;
+  z-index:-1;
+}
 
 </style>
 </head>
 
 <body>
+
 
   <div id="notifBox"></div>
 
@@ -316,7 +387,15 @@ button:active{
 </div>
 
 <div class="header">
-  <h3>DuitKu</h3>
+<div class="logo-pulse">
+  <span class="coin"></span>
+  <span class="brand">
+    <span class="duit">Duit</span><span class="ku">Ku</span>
+  </span>
+</div>
+
+
+
   <button onclick="openLogout()">Logout</button>
 </div>
 
