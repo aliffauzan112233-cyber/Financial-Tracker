@@ -1,258 +1,269 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:'Poppins',sans-serif;
-  -webkit-tap-highlight-color:transparent;
-}
+  <style>
+    /*  RESET  */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-body{
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:radial-gradient(circle at top right,#6366f1,#1e1b4b);
-  overflow:hidden;
-}
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: radial-gradient(circle at top right, #6366f1, #1e1b4b);
+      overflow: hidden;
+    }
 
-/* BACKGROUND BLOB (SAMA DENGAN REGISTER) */
-.bg{
-  position:absolute;
-  width:420px;
-  height:420px;
-  border-radius:50%;
-  filter:blur(120px);
-  opacity:.6;
-}
-.bg.one{background:#22d3ee; top:-120px; left:-120px;}
-.bg.two{background:#a855f7; bottom:-120px; right:-120px;}
+    /*  BACKGROUND  */
+    .bg {
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.6;
+    }
 
-/* NOTIFIKASI */
-#notif{
-  position:fixed;
-  top:-80px;
-  left:50%;
-  transform:translateX(-50%);
-  padding:14px 24px;
-  color:white;
-  border-radius:12px;
-  font-size:14px;
-  font-weight:500;
-  box-shadow:0 10px 30px rgba(0,0,0,.4);
-  transition:.5s;
-  z-index:100;
-}
+    .bg.one {
+      background: #22d3ee;
+      top: -120px;
+      left: -120px;
+    }
 
-/* LOGIN CARD (SAMA DENGAN REGISTER) */
-.login-box{
-  width:100%;
-  max-width:420px;
-  padding:40px 32px;
-  background:rgba(255,255,255,.12);
-  backdrop-filter:blur(18px);
-  border-radius:22px;
-  border:1px solid rgba(255,255,255,.25);
-  box-shadow:0 30px 60px rgba(0,0,0,.35);
-  color:white;
-  animation:pop .7s ease;
-}
+    .bg.two {
+      background: #a855f7;
+      bottom: -120px;
+      right: -120px;
+    }
 
-@keyframes pop{
-  from{opacity:0; transform:scale(.9);}
-  to{opacity:1; transform:scale(1);}
-}
+    /*  NOTIFIKASI */
+    #notif {
+      position: fixed;
+      top: -80px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 14px 24px;
+      color: white;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+      transition: 0.5s;
+      z-index: 100;
+    }
 
-.login-box h1{
-  text-align:center;
-  margin-bottom:30px;
-  font-weight:700;
-  letter-spacing:1px;
-}
+    /*  LOGIN BOX  */
+    .login-box {
+      width: 100%;
+      max-width: 420px;
+      padding: 40px 32px;
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(18px);
+      border-radius: 22px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+      color: white;
+      animation: pop 0.7s ease;
+    }
 
-/*  INPUT GROUP (SAMA DENGAN REGISTER)  */
-.input-group{
-  position:relative;
-  margin-bottom:20px;
-}
+    @keyframes pop {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
 
-.input-group label{
-  font-size:13px;
-  opacity:.85;
-}
+    .login-box h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 700;
+      letter-spacing: 1px;
+    }
 
-.input-group input{
-  width:100%;
-  margin-top:8px;
-  padding:13px 14px;
-  border-radius:14px;
-  border:none;
-  outline:none;
-  font-size:14px;
-  background:rgba(255,255,255,.85);
-  transition:.4s ease;
-}
+    /*  INPUT  */
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+    }
 
-/* glow */
-.input-group::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius:16px;
-  background:linear-gradient(135deg,#22d3ee,#6366f1,#a855f7);
-  opacity:0;
-  filter:blur(10px);
-  transition:.4s;
-  z-index:-1;
-}
+    .input-group label {
+      font-size: 13px;
+      opacity: 0.85;
+    }
 
-.input-group:hover::before{
-  opacity:.6;
-}
+    .input-group input {
+      width: 100%;
+      margin-top: 8px;
+      padding: 13px 14px;
+      border-radius: 14px;
+      border: none;
+      outline: none;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.85);
+      transition: 0.4s ease;
+    }
 
-.input-group:hover input{
-  transform:translateY(-2px);
-  box-shadow:0 10px 25px rgba(34,211,238,.35);
-}
+    /* glow */
+    .input-group::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #22d3ee, #6366f1, #a855f7);
+      opacity: 0;
+      filter: blur(10px);
+      transition: 0.4s;
+      z-index: -1;
+    }
 
-.input-group input:focus{
-  transform:translateY(-3px) scale(1.02);
-  box-shadow:
-    0 0 0 2px rgba(34,211,238,.8),
-    0 18px 35px rgba(99,102,241,.5);
-}
+    .input-group:hover::before {
+      opacity: 0.6;
+    }
 
-/* BUTTON */
-button{
-  width:100%;
-  margin-top:10px;
-  padding:13px;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  background:linear-gradient(135deg,#22d3ee,#6366f1);
-  color:white;
-  transition:.3s;
-}
+    .input-group:hover input {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(34, 211, 238, 0.35);
+    }
 
-button:hover{
-  transform:translateY(-3px);
-  box-shadow:0 12px 30px rgba(34,211,238,.5);
-}
+    .input-group input:focus {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow:
+        0 0 0 2px rgba(34, 211, 238, 0.8),
+        0 18px 35px rgba(99, 102, 241, 0.5);
+    }
 
-p{
-  text-align:center;
-  margin-top:20px;
-  font-size:14px;
-}
+    /*  BUTTON  */
+    button {
+      width: 100%;
+      margin-top: 10px;
+      padding: 13px;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      background: linear-gradient(135deg, #22d3ee, #6366f1);
+      color: white;
+      transition: 0.3s;
+    }
 
-a{
-  color:#22d3ee;
-  text-decoration:none;
-  font-weight:600;
-}
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(34, 211, 238, 0.5);
+    }
 
-a:hover{ text-decoration:underline; }
+    p {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
 
-@media(max-width:480px){
-  .login-box{margin:0 15px;}
-}
-</style>
+    a {
+      color: #22d3ee;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 480px) {
+      .login-box {
+        margin: 0 15px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="bg one"></div>
-<div class="bg two"></div>
+  <div class="bg one"></div>
+  <div class="bg two"></div>
 
-<div id="notif"></div>
+  <div id="notif"></div>
 
-<div class="login-box">
-  <h1>LOGIN</h1>
+  <div class="login-box">
+    <h1>LOGIN</h1>
 
-  <div class="input-group">
-    <label>Username</label>
-    <input id="username" placeholder="Masukkan username">
+    <div class="input-group">
+      <label>Username</label>
+      <input id="username" placeholder="Masukkan username" />
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input id="password" type="password" placeholder="Masukkan password" />
+    </div>
+
+    <button onclick="login()">Masuk</button>
+
+    <p>Belum punya akun? <a href="/register">Daftar</a></p>
   </div>
 
-  <div class="input-group">
-    <label>Password</label>
-    <input id="password" type="password" placeholder="Masukkan password">
-  </div>
+  <script>
+    window.onload = () => {
+      username.value = "";
+      password.value = "";
+    };
 
-  <button onclick="login()">Masuk</button>
+    const showNotif = (text, type = "success") => {
+      const box = document.getElementById("notif");
+      box.innerText = text;
 
-  <p>Belum punya akun? <a href="/register">Daftar</a></p>
-</div>
+      box.style.background =
+        type === "success" ? "#22c55e" :
+        type === "error" ? "#ef4444" :
+        "#f59e0b";
 
-<script>
-window.onload = ()=>{
-  username.value="";
-  password.value="";
-};
+      box.style.top = "20px";
+      setTimeout(() => box.style.top = "-80px", 2500);
+    };
 
-function showNotif(text, type="success"){
-  const box = document.getElementById("notif");
-  box.innerText = text;
+    async function login() {
+      const user = username.value.trim();
+      const pass = password.value.trim();
 
-  box.style.background =
-    type==="success" ? "#22c55e" :
-    type==="error" ? "#ef4444" : "#f59e0b";
+      if (!user && !pass)
+        return showNotif("Username & Password wajib diisi", "error");
 
-  box.style.top = "20px";
-  setTimeout(()=> box.style.top="-80px",2500);
-}
+      if (!user)
+        return showNotif("Username belum diisi", "error");
 
-async function login(){
-  const user = username.value.trim();
-  const pass = password.value.trim();
+      if (!pass)
+        return showNotif("Password belum diisi", "error");
 
-  if(!user && !pass){
-    showNotif("Username & Password wajib diisi","error");
-    return;
-  }
-  if(!user){
-    showNotif("Username belum diisi","error");
-    return;
-  }
-  if(!pass){
-    showNotif("Password belum diisi","error");
-    return;
-  }
+      try {
+        const res = await fetch("/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: user, password: pass })
+        });
 
-  try{
-    const res = await fetch("/api/login",{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify({ username:user, password:pass })
-    });
+        const data = await res.json();
 
-    const data = await res.json();
-
-    if(data.success){
-      localStorage.setItem("username", user);
-      showNotif("Login berhasil! Mengalihkan...","success");
-      setTimeout(()=>location.href="/dashboard",1500);
-    }else{
-      showNotif(data.message || "Login gagal","error");
+        if (data.success) {
+          localStorage.setItem("username", user);
+          showNotif("Login berhasil! Mengalihkan...", "success");
+          setTimeout(() => location.href = "/dashboard", 1500);
+        } else {
+          showNotif(data.message || "Login gagal", "error");
+        }
+      } catch {
+        showNotif("Server tidak merespon", "error");
+      }
     }
-  }catch{
-    showNotif("Server tidak merespon","error");
-  }
-}
-
-</script>
+  </script>
 
 </body>
 </html>
