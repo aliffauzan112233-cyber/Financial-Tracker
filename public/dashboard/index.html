@@ -1,395 +1,715 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <style>
-    /*  RESET  */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Poppins, sans-serif;
-    }
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif}
+body {
+  background: linear-gradient(
+    160deg,
+    #020617,
+    #0f172a 40%,
+    #020617
+  );
+  color: #f9fafb;
+}
 
-    body {
-      background: linear-gradient(135deg, #020617, #0f172a);
-      color: #e5e7eb;
-    }
 
-    /*  NOTIF  */
-    #notifBox {
-      position: fixed;
-      top: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 999;
-    }
+/* NOTIFIKASI */
+#notifBox{
+  position:fixed;top:20px;left:50%;
+  transform:translateX(-50%);z-index:999
+}
+.notif{
+  padding:14px 22px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  font-weight:500;
+  margin-bottom:10px;
+  box-shadow:0 15px 35px rgba(0,0,0,.4)
+}
 
-    .notif {
-      padding: 14px 22px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      font-weight: 500;
-      margin-bottom: 10px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-    }
+/* HEADER */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 28px;
+  background:rgba(255,255,255,.05)
+}
+.header h1{font-size:18px;font-weight:600}
+.header button{
+  background:linear-gradient(135deg,#ef4444,#dc2626);
+  border:none;
+  padding:10px 20px;
+  color:white;
+  border-radius:14px;
+  font-weight:500;
+  cursor:pointer
+}
 
-    /*  HEADER  */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 18px 28px;
-      background: rgba(255, 255, 255, 0.05);
-    }
+/* LAYOUT */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 24px;
 
-    .header button {
-      background: linear-gradient(135deg, #ef4444, #dc2626);
-      border: none;
-      padding: 10px 20px;
-      color: white;
-      border-radius: 14px;
-      font-weight: 500;
-      cursor: pointer;
-    }
+  align-items: start; 
+}
 
-    /*  LAYOUT  */
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 24px;
-      display: grid;
-      grid-template-columns: 1fr 420px;
-      gap: 24px;
-    }
 
-    /*  CARD  */
-    .card {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(16px);
-      border-radius: 18px;
-      padding: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
-      transition: 0.4s ease;
-    }
+/* CARD */
+.card{
+  background:rgba(255,255,255,.08);
+  padding:22px;
+  border-radius:22px;
+}
+.card>b{font-size:18px}
 
-    .card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 30px 60px rgba(56, 189, 248, 0.45);
-    }
+/* SUMMARY */
+.summary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-bottom:20px
+}
+.summary div{
+  background:rgba(255,255,255,.1);
+  padding:18px;
+  border-radius:18px
+}
+.summary b{
+  font-size:24px;
+  margin-top:6px;
+  display:block
+}
+.summary div{
+  background:rgba(0, 0, 0, 0.1);
+  padding:18px;
+  border-radius:18px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-width:0; 
+}
 
-    /*  SUMMARY  */
-    .summary {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-bottom: 20px;
-    }
+.summary b{
+font-size:22px;
+margin-top:6px;
+display:block;
+  white-space:nowrap;        /* TIDAK TURUN BARIS */
+  overflow:hidden;           /* POTONG JIKA PANJANG */
+  text-overflow:ellipsis;    /* TITIK-TITIK */
+}
+.summary b{
+  font-size:clamp(18px, 2vw, 24px);
+}
 
-    .summary div {
-      background: rgba(255, 255, 255, 0.1);
-      padding: 18px;
-      border-radius: 18px;
-      display: flex;
-      flex-direction: column;
-    }
 
-    .summary b {
-      font-size: clamp(18px, 2vw, 24px);
-      margin-top: 6px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
 
-    /*  FORM  */
-    .form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-top: 16px;
-    }
+/* FORM  */
+.form{
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+  margin-top:16px
+}
+.form input,.form select{
+  padding:16px;
+  border:none;
+  border-radius:16px;
+  font-size:15px
+}
+.form button{
+  padding:16px;
+  border:none;
+  border-radius:18px;
+  background:linear-gradient(135deg,#22d3ee,#6366f1);
+  color:white;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer
+}
 
-    .form input,
-    .form select {
-      padding: 16px;
-      border: none;
-      border-radius: 16px;
-      font-size: 15px;
-    }
+/*  RIWAYAT  */
+#riwayat{margin-top:16px}
+#riwayat li{
+  list-style:none;
+  background:rgba(255,255,255,.1);
+  padding:18px 20px;
+  border-radius:20px;
+  margin-bottom:14px;
+  transition:.25s
+}
+#riwayat li:hover{
+  background:rgba(255,255,255,.14)
+}
 
-    .form button {
-      padding: 16px;
-      border: none;
-      border-radius: 18px;
-      background: linear-gradient(135deg, #22d3ee, #6366f1);
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-    }
+.tx-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+.tx-amount{
+  font-size:22px;
+  font-weight:600
+}
 
-    /*  RIWAYAT  */
-    #riwayat {
-      margin-top: 16px;
-    }
+.badge{
+  padding:6px 14px;
+  border-radius:14px;
+  font-size:14px;
+  font-weight:500
+}
+.in{color:#22c55e}
+.out{color:#ef4444}
 
-    #riwayat li {
-      list-style: none;
-      background: rgba(255, 255, 255, 0.1);
-      padding: 18px 20px;
-      border-radius: 20px;
-      margin-bottom: 14px;
-      transition: 0.25s;
-    }
+/* BARIS BAWAH RAPi  */
+.tx-bottom{
+  display:grid;
+  grid-template-columns:140px 1fr auto;
+  gap:14px;
+  align-items:center;
+  margin-top:12px
+}
+.tx-date{
+  font-size:14px;
+  opacity:.85
+}
+.tx-desc{
+  font-size:15px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis
+}
+.actions{
+  display:flex;
+  gap:8px
+}
+.actions button{
+  border:none;
+  padding:8px 14px;
+  border-radius:12px;
+  font-size:13px;
+  font-weight:500;
+  color:white;
+  cursor:pointer
+}
+.edit{background:#22c55e}
+.delete{background:#ef4444}
 
-    #riwayat li:hover {
-      background: rgba(255, 255, 255, 0.14);
-    }
+/*  LOGOUT MODAL  */
+#logoutModal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000
+}
+.modal{
+  background:#020617;
+  padding:28px;
+  border-radius:24px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,.6)
+}
+.modal h2{
+  font-size:20px;
+  margin-bottom:10px
+}
+.modal p{
+  font-size:14px;
+  opacity:.85;
+  margin-bottom:22px
+}
+.modal-actions{
+  display:flex;
+  gap:12px
+}
+.modal-actions button{
+  flex:1;
+  padding:12px;
+  border:none;
+  border-radius:14px;
+  font-weight:600;
+  cursor:pointer
+}
+.cancel{background:#334155;color:white}
+.confirm{background:linear-gradient(135deg,#ef4444,#dc2626);color:white}
 
-    .tx-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+/*  RESPONSIVE  */
+@media(max-width:900px){
+  .container{grid-template-columns:1fr}
+  .tx-bottom{grid-template-columns:1fr}
+}
+.fade-up{
+  opacity:0;
+  transform:translateY(30px);
+  animation:fadeUp .8s ease forwards;
+}
 
-    .tx-amount {
-      font-size: 22px;
-      font-weight: 600;
-    }
+@keyframes fadeUp{
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+.card{
+  background:rgba(0, 0, 0, 0.12);
+  backdrop-filter:blur(1000px);
+  border-radius:18px;
+  padding:20px;
+  border:1px solid rgba(97, 97, 97, 0.2);
+  box-shadow:0 20px 40px rgba(0, 0, 0, 0.25);
+  transition:.4s ease;
+}
 
-    .badge {
-      padding: 6px 14px;
-      border-radius: 14px;
-      font-size: 14px;
-      font-weight: 500;
-    }
+.card:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow:0 30px 60px rgba(56,189,248,.45);
+}
+.transaksi{
+  opacity:0;
+  transform:translateX(-20px);
+  animation:slideIn .5s ease forwards;
+}
 
-    .in { background: #22c55e; }
-    .out { background: #ef4444; }
+.transaksi:nth-child(1){animation-delay:.1s}
+.transaksi:nth-child(2){animation-delay:.2s}
+.transaksi:nth-child(3){animation-delay:.3s}
 
-    .tx-bottom {
-      display: grid;
-      grid-template-columns: 140px 1fr auto;
-      gap: 14px;
-      align-items: center;
-      margin-top: 12px;
-    }
+@keyframes slideIn{
+  to{
+    opacity:1;
+    transform:translateX(0);
+  }
+}
+button{
+  transition:.3s;
+}
 
-    .tx-date { font-size: 14px; opacity: 0.85; }
-    .tx-desc {
-      font-size: 15px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+button:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 25px rgba(56,189,248,.5);
+}
 
-    .actions {
-      display: flex;
-      gap: 8px;
-    }
+button:active{
+  transform:scale(.95);
+}
+/* DUITKU LOGO  */
+.logo-pulse{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
 
-    .actions button {
-      border: none;
-      padding: 8px 14px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 500;
-      color: white;
-      cursor: pointer;
-    }
+/* KOIN HIDUP */
+.logo-pulse .coin{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  background:radial-gradient(circle at 30% 30%, #22d3ee,#6366f1,#22d3ee);
+  animation:pulseCoin 2.4s infinite ease-in-out;
+  box-shadow:
+    0 0 10px rgba(255, 255, 255, 0.9),
+    0 0 28px rgba(99,102,241,.9);
+}
 
-    .edit { background: #22c55e; }
-    .delete { background: #ef4444; }
+@keyframes pulseCoin{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.4)}
+  100%{transform:scale(1)}
+}
 
-    /*  LOGOUT MODAL  */
-    #logoutModal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
+/* BRAND TEXT */
+.logo-pulse .brand{
+  display:flex;
+  align-items:center;
+  font-size:28px;
+  font-weight:900;
+  letter-spacing:-0.5px; /*agar tulisan nyatu*/
+}
 
-    .modal {
-      background: #020617;
-      padding: 28px;
-      border-radius: 24px;
-      width: 320px;
-      text-align: center;
-    }
+/* CSS DUIT*/
+.logo-pulse .duit {
+    background: linear-gradient(135deg, #22d3ee, #6366f1, #22d3ee);
+    background-size: 200% auto; /* 200% agar gradasi bisa bergerak */
+    
+  
+    -webkit-background-clip: text;
+    background-clip: text; 
+    -webkit-text-fill-color: transparent;
+    
+    animation: flowText 4s infinite linear;
+    text-shadow: 0 0 30px rgba(99, 102, 241, 0.9);
+}
 
-    .modal-actions {
-      display: flex;
-      gap: 12px;
-    }
+@keyframes flowText {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
 
-    .cancel { background: #334155; color: white; }
-    .confirm { background: linear-gradient(135deg, #ef4444, #dc2626); color: white; }
+/* glow lembut */
+.logo-pulse .ku::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  filter:blur(1000px);
+  background:rgba(199,210,254,.45);
+  opacity:.6;
+  z-index:-1;
+}
+/* ROW TRANSAKSI */
+.tx-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  border-radius: 20px;
+  margin-bottom: 14px;
+  background: linear-gradient(135deg, #334155, #1e293b);
+}
 
-    /*  RESPONSIVE  */
-    @media (max-width: 900px) {
-      .container { grid-template-columns: 1fr; }
-      .tx-bottom { grid-template-columns: 1fr; }
-    }
-  </style>
+/* LEFT SIDE */
+.tx-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.tx-info {
+  font-size: 14px;
+  color: #e5e7eb;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* RIGHT SIDE */
+.tx-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.tx-amount {
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* BADGE */
+.badge {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .tx-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tx-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+/* ROW */
+.tx-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-radius: 18px;
+  margin-bottom: 14px;
+  background: #1e293b;
+}
+
+/* LEFT */
+.tx-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ICON */
+.icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* ICON WARNA */
+.icon-in {
+  background: rgba(34,197,94,0.15);
+  color: #22c55e;
+}
+
+.icon-out {
+  background: rgba(239,68,68,0.15);
+  color: #ef4444;
+}
+
+/* INFO */
+.tx-info {
+  font-size: 14px;
+  color: #e5e7eb;
+}
+
+/* RIGHT */
+.tx-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* AMOUNT */
+.tx-amount {
+  font-size: 17px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* WARNA NOMINAL */
+.amount-in {
+  color: #22c55e;
+}
+
+.amount-out {
+  color: #ef4444;
+}
+
+/* ACTIONS */
+.actions button {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.actions button:hover {
+  opacity: 1;
+}
+
+/* RESPONSIVE */
+@media (max-width: 600px) {
+  .tx-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tx-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+
+</style>
 </head>
 
 <body>
 
+
   <div id="notifBox"></div>
 
-  <!-- LOGOUT MODAL -->
-  <div id="logoutModal">
-    <div class="modal">
-      <h2>Logout</h2>
-      <p>Apakah kamu yakin ingin keluar?</p>
-      <div class="modal-actions">
-        <button class="cancel" onclick="closeLogout()">Batal</button>
-        <button class="confirm" onclick="doLogout()">Logout</button>
-      </div>
+<!-- LOGOUT MODAL -->
+<div id="logoutModal">
+  <div class="modal">
+    <h2>Logout</h2>
+    <p>Apakah kamu yakin ingin keluar?</p>
+    <div class="modal-actions">
+      <button class="cancel" onclick="closeLogout()">Batal</button>
+      <button class="confirm" onclick="doLogout()">Logout</button>
     </div>
   </div>
+</div>
 
-  <div class="header">
-    <div><b>DuitKu</b></div>
-    <button onclick="openLogout()">Logout</button>
-  </div>
+<div class="header">
+<div class="logo-pulse">
+  <span class="coin"></span>
+  <span class="brand">
+    <span class="duit">Duit</span><span class="ku">Ku</span>
+  </span>
+</div>
 
-  <div class="container">
-    <div>
-      <div class="summary">
-        <div>Pemasukan<b id="income">Rp 0</b></div>
-        <div>Pengeluaran<b id="outcome">Rp 0</b></div>
-        <div>Saldo<b id="balance">Rp 0</b></div>
-      </div>
 
-      <div class="card">
-        <b>Riwayat Transaksi</b>
-        <ul id="riwayat"></ul>
-      </div>
+
+  <button onclick="openLogout()">Logout</button>
+</div>
+
+<div class="container">
+
+  <div>
+    <div class="summary">
+      <div>Pemasukan<b id="income">Rp 0</b></div>
+      <div>Pengeluaran<b id="outcome">Rp 0</b></div>
+      <div>Saldo<b id="balance">Rp 0</b></div>
     </div>
 
     <div class="card">
-      <b id="formTitle">Tambah Transaksi</b>
-      <div class="form">
-        <input id="amount" type="number" placeholder="Nominal">
-        <input id="date" type="date">
-        <select id="status">
-          <option value="INCOME">Pemasukan</option>
-          <option value="OUTCOME">Pengeluaran</option>
-        </select>
-        <input id="description" placeholder="Keterangan">
-        <button onclick="saveTx()">Simpan</button>
-      </div>
+      <b>Riwayat Transaksi</b>
+      <ul id="riwayat"></ul>
     </div>
   </div>
 
-  <script>
-    const username = localStorage.getItem("username");
-    const txKey = "transactions_" + username;
+  <div class="card">
+<b id="formTitle">Tambah Transaksi</b>
+    <div class="form">
+      <input id="amount" type="number" placeholder="Nominal">
+      <input id="date" type="date">
+      <select id="status">
+        <option value="INCOME">Pemasukan</option>
+        <option value="OUTCOME">Pengeluaran</option>
+      </select>
+      <input id="description" placeholder="Keterangan">
+      <button onclick="saveTx()">Simpan</button>
+    </div>
+  </div>
 
-    let transactions = JSON.parse(localStorage.getItem(txKey)) || [];
-    let editIndex = null;
+</div>
 
-    const saveStorage = () =>
-      localStorage.setItem(txKey, JSON.stringify(transactions));
+<script>
+const username = localStorage.getItem("username");
+const txKey = "transactions_" + username;
 
-    const showNotif = (msg) => {
-      const el = document.createElement("div");
-      el.className = "notif";
-      el.innerText = msg;
-      notifBox.appendChild(el);
-      setTimeout(() => el.remove(), 2500);
-    };
+let transactions = JSON.parse(localStorage.getItem(txKey)) || [];
+let editIndex = null;
 
-    const openLogout = () => logoutModal.style.display = "flex";
-    const closeLogout = () => logoutModal.style.display = "none";
-    const doLogout = () => {
-      showNotif("Logout berhasil");
-      setTimeout(() => location.href = "/login", 1200);
-    };
+function saveStorage(){
+  localStorage.setItem(txKey, JSON.stringify(transactions));
+}
 
-    function render() {
-      let incomeTotal = 0, outcomeTotal = 0;
-      riwayat.innerHTML = "";
 
-      transactions.forEach((t, i) => {
-        t.status === "INCOME" ? incomeTotal += t.nominal : outcomeTotal += t.nominal;
+function showNotif(msg){
+  const d=document.createElement("div");
+  d.className="notif";
+  d.innerText=msg;
+  notifBox.appendChild(d);
+  setTimeout(()=>d.remove(),2500);
+}
 
-        riwayat.innerHTML += `
-          <li>
-            <div class="tx-top">
-              <span class="badge ${t.status === "INCOME" ? "in" : "out"}">
-                ${t.status === "INCOME" ? "Pemasukan" : "Pengeluaran"}
-              </span>
-              <span class="tx-amount">Rp ${t.nominal.toLocaleString("id-ID")}</span>
-            </div>
-            <div class="tx-bottom">
-              <span class="tx-date">${new Date(t.transactionDate).toLocaleDateString("id-ID")}</span>
-              <span class="tx-desc">${t.description || "-"}</span>
-              <div class="actions">
-                <button class="edit" onclick="editTx(${i})">Edit</button>
-                <button class="delete" onclick="deleteTx(${i})">Hapus</button>
-              </div>
-            </div>
-          </li>`;
-      });
+/* Bagian LOGOUT  */
+function openLogout(){ logoutModal.style.display="flex" }
+function closeLogout(){ logoutModal.style.display="none" }
+function doLogout(){
+  showNotif("Logout berhasil");
+  setTimeout(()=>location.href="/login",1200);
+}
 
-      income.innerText = "Rp " + incomeTotal.toLocaleString("id-ID");
-      outcome.innerText = "Rp " + outcomeTotal.toLocaleString("id-ID");
-      balance.innerText = "Rp " + (incomeTotal - outcomeTotal).toLocaleString("id-ID");
-    }
+/* Bagian RENDER */
+function render(){
+  let inc=0,out=0;
+  riwayat.innerHTML="";
 
-    function saveTx() {
-      if (!amount.value || !date.value)
-        return showNotif("Nominal & tanggal wajib diisi");
+  transactions.forEach((t,i)=>{
+    t.status==="INCOME" ? inc+=t.nominal : out+=t.nominal;
 
-      const tx = {
-        nominal: +amount.value,
-        transactionDate: date.value,
-        status: status.value,
-        description: description.value.trim()
-      };
+    riwayat.innerHTML += `
+<li class="tx-row ${t.status === "INCOME" ? "tx-in" : "tx-out"}">
+  
+  <div class="tx-left">
+    <span class="icon ${t.status === "INCOME" ? "icon-in" : "icon-out"}">
+      ${t.status === "INCOME" ? "⬆" : "⬇"}
+    </span>
 
-      editIndex !== null
-        ? transactions[editIndex] = tx
-        : transactions.unshift(tx);
+    <span class="tx-info">
+      ${new Date(t.transactionDate).toLocaleDateString("id-ID")}
+      •
+      ${t.description || "Tanpa keterangan"}
+    </span>
+  </div>
 
-      editIndex = null;
-      saveStorage();
-      amount.value = date.value = description.value = "";
-      formTitle.innerText = "Tambah Transaksi";
-      render();
-      showNotif("Transaksi disimpan");
-    }
+  <div class="tx-right">
+    <span class="tx-amount ${t.status === "INCOME" ? "amount-in" : "amount-out"}">
+      Rp ${t.nominal.toLocaleString("id-ID")}
+    </span>
 
-    function editTx(i) {
-      const t = transactions[i];
-      amount.value = t.nominal;
-      date.value = t.transactionDate;
-      status.value = t.status;
-      description.value = t.description || "";
-      editIndex = i;
-      formTitle.innerText = "Edit Transaksi";
-    }
+    <div class="actions">
+      <button class="edit" onclick="editTx(${i})">✏️</button>
+      <button class="delete" onclick="deleteTx(${i})">🗑</button>
+    </div>
+  </div>
 
-    function deleteTx(i) {
-      transactions.splice(i, 1);
-      saveStorage();
-      render();
-      showNotif("Transaksi dihapus");
-    }
+</li>
+`;
 
-    render();
-  </script>
+
+  });
+
+  income.innerText="Rp "+inc.toLocaleString("id-ID");
+  outcome.innerText="Rp "+out.toLocaleString("id-ID");
+  balance.innerText="Rp "+(inc-out).toLocaleString("id-ID");
+}
+
+function saveTx(){
+  if(!amount.value||!date.value) return showNotif("Nominal & tanggal wajib diisi");
+
+  const tx={
+    nominal:+amount.value,
+    transactionDate:date.value,
+    status:document.getElementById("status").value,
+    description:description.value.trim()
+  };
+
+  editIndex!==null ? transactions[editIndex]=tx : transactions.unshift(tx);
+  editIndex=null;
+  saveStorage();
+  amount.value=date.value=description.value="";
+  render();
+  showNotif("Transaksi disimpan"),
+  document.getElementById("formTitle").innerText = "Tambah Transaksi";
+
+}
+
+
+function editTx(i){
+  const t=transactions[i];
+  amount.value=t.nominal;
+  date.value=t.transactionDate;
+  status.value=t.status;
+  description.value=t.description||"";
+  editIndex=i,
+  document.getElementById("formTitle").innerText = "Edit Transaksi";
+
+
+}
+
+
+function deleteTx(i){
+  transactions.splice(i,1);
+  saveStorage();
+  render();
+  showNotif("Transaksi dihapus");
+}
+
+render();
+</script>
+
+
 </body>
 </html>
