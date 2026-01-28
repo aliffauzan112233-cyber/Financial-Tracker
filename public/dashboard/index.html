@@ -527,6 +527,29 @@ button:active{
     justify-content: space-between;
   }
 }
+/* SUMMARY ICON + WARNA */
+.sum-card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.sum-icon{
+  position:absolute;
+  top:14px;
+  right:16px;
+  font-size:22px;
+  opacity:.85;
+}
+
+.sum-in b{color:#22c55e}
+.sum-in .sum-icon{color:#22c55e}
+
+.sum-out b{color:#ef4444}
+.sum-out .sum-icon{color:#ef4444}
+
+
 
 
 </style>
@@ -566,10 +589,25 @@ button:active{
 
   <div>
     <div class="summary">
-      <div>Pemasukan<b id="income">Rp 0</b></div>
-      <div>Pengeluaran<b id="outcome">Rp 0</b></div>
-      <div>Saldo<b id="balance">Rp 0</b></div>
-    </div>
+  <div class="sum-card sum-in">
+    <span class="sum-icon">⬆</span>
+    <small>Pemasukan</small>
+    <b id="income">Rp 0</b>
+  </div>
+
+  <div class="sum-card sum-out">
+    <span class="sum-icon">⬇</span>
+    <small>Pengeluaran</small>
+    <b id="outcome">Rp 0</b>
+  </div>
+
+  <div class="sum-card sum-balance">
+    <span class="sum-icon">💸</span>
+    <small>Saldo</small>
+    <b id="balance">Rp 0</b>
+  </div>
+</div>
+
 
     <div class="card">
       <b>Riwayat Transaksi</b>
